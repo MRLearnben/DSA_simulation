@@ -1,0 +1,1175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Stepwise Lab — Arrays, Lists, Stacks, Queues, Trees</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#f3efe7;--surf:#e8e3d8;--ink:#171510;--ink2:#4a463d;--bar:#cdc6b5;--acc:#d6410f;--on:#fff;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#14130f;--surf:#211f19;--ink:#f1ede3;--ink2:#b9b3a3;--bar:#3c3931;--acc:#ff6a35;--on:#14130f}}
+:root[data-theme="dark"]{--bg:#14130f;--surf:#211f19;--ink:#f1ede3;--ink2:#b9b3a3;--bar:#3c3931;--acc:#ff6a35;--on:#14130f}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:400 17px/1.5 "Instrument Sans",system-ui,-apple-system,"Segoe UI",sans-serif}
+.wrap{max-width:1320px;margin:0 auto;padding:0 24px 64px}
+.top{display:flex;justify-content:space-between;padding:20px 0}
+.top b{font-weight:700;letter-spacing:-.02em}
+h1{font-size:clamp(40px,7vw,92px);line-height:.94;letter-spacing:-.045em;margin:16px 0 40px;font-weight:700;max-width:14ch}
+h1 em{font-style:normal;color:var(--acc)}
+.app{display:grid;grid-template-columns:260px minmax(0,1fr);gap:36px;align-items:start}
+nav{display:flex;flex-direction:column;gap:2px}
+nav h3{font-size:12px;font-weight:600;margin:20px 0 6px;color:var(--ink2);text-transform:uppercase;letter-spacing:.06em}
+nav h3:first-child{margin-top:0}
+nav button{all:unset;cursor:pointer;padding:7px 10px;font-weight:500;line-height:1.3}
+nav button:hover{background:var(--surf)}
+nav button[aria-pressed=true]{background:var(--ink);color:var(--bg)}
+button:focus-visible,input:focus-visible{outline:2px solid var(--acc);outline-offset:2px}
+h2{font-size:clamp(28px,4vw,44px);letter-spacing:-.035em;line-height:1;margin:0 0 16px}
+.stage{background:var(--surf);padding:20px 16px;overflow-x:auto;min-height:190px;display:flex;align-items:center}
+.stage svg{display:block;max-width:100%;height:auto;margin:0 auto;color:var(--ink)}
+.nb{fill:var(--bg);stroke:var(--ink);stroke-width:2}.nb.hl{fill:var(--acc);stroke:var(--acc)}.nb.em{stroke:var(--bar);stroke-dasharray:4 4}
+.tx{fill:var(--ink);font:600 16px "Instrument Sans",system-ui,sans-serif;text-anchor:middle;dominant-baseline:central}.tx.hl{fill:var(--on)}
+.t{fill:var(--ink2);font:500 13px "Instrument Sans",system-ui,sans-serif;text-anchor:middle}
+.ln{stroke:var(--ink);stroke-width:2}.ar{stroke:var(--ink);stroke-width:2;fill:none}
+.ctl{display:flex;flex-wrap:wrap;gap:8px 10px;align-items:center;margin:16px 0 8px}
+.ctl input[type=text]{width:120px;padding:9px 10px;border:2px solid var(--ink);background:var(--bg);color:var(--ink);font:inherit;font-size:15px}
+.ctl button{all:unset;cursor:pointer;padding:9px 14px;background:var(--surf);font-weight:600;font-size:15px}
+.ctl button.pri{background:var(--acc);color:var(--on)}
+.ctl label{display:flex;gap:8px;align-items:center;font-size:14px}
+.ctl input[type=range]{accent-color:var(--acc);width:90px}
+.cd{background:var(--surf);padding:16px;overflow-x:auto}.cd svg{display:block;max-width:100%;height:auto;margin:0 auto;color:var(--ink)}
+.t.tl{text-anchor:start}.t.ac{fill:var(--acc);font-weight:700}.nb.dn{fill:var(--ink)}.tx.dn{fill:var(--bg)}.ar.ac{stroke:var(--acc)}
+.ex2{display:grid;grid-template-columns:1fr 1fr;gap:24px 32px;margin-top:24px;align-items:start}
+#ex2{margin:0 0 36px}.ex2 .pb{grid-column:1/-1}.ex2 .pb p{margin:0;font-weight:600}
+.stp{margin:0;padding-left:22px}.stp li{margin-bottom:10px}
+pre.cpp{margin:0;background:var(--surf);padding:14px 16px;overflow-x:auto;line-height:1.5}.cpp code{font-size:13.5px;white-space:pre}
+.ed{background:var(--surf)}
+.edh{display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap;padding:8px 10px;border-bottom:1px solid var(--bar);font:600 13px/1 ui-monospace,Menlo,Consolas,monospace}
+.edb{display:flex;gap:6px}
+.edb button{all:unset;cursor:pointer;padding:7px 11px;background:var(--bg);font:600 13px "Instrument Sans",system-ui,sans-serif}
+.edb button.pri{background:var(--acc);color:var(--on)}
+.edb button:focus-visible,textarea.cpp:focus-visible{outline:2px solid var(--acc);outline-offset:-2px}
+.edw{display:flex;overflow:hidden}
+.gut,textarea.cpp{margin:0;font:13.5px/1.5 ui-monospace,Menlo,Consolas,monospace;padding-top:12px;padding-bottom:12px}
+.gut{padding-left:12px;padding-right:8px;text-align:right;color:var(--ink2);overflow:hidden;user-select:none;min-width:38px}
+textarea.cpp{flex:1;min-width:0;border:0;padding-left:8px;padding-right:12px;background:transparent;color:var(--ink);resize:none;white-space:pre;overflow:auto;tab-size:4}
+.ol{font-size:12px;font-weight:600;color:var(--ink2);padding:10px 12px 0;border-top:1px solid var(--bar)}
+.outp{margin:0;padding:6px 12px 12px;font:13.5px/1.5 ui-monospace,Menlo,Consolas,monospace;white-space:pre-wrap;min-height:56px}
+.ex2{grid-template-columns:minmax(0,.85fr) minmax(0,1.15fr)}
+@media (max-width:860px){.ex2{grid-template-columns:1fr}}
+.cxw{margin:0 0 36px;background:var(--surf);padding:16px}
+.cxh{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;margin-bottom:10px}
+.cxh h4{margin:0;font-size:13px;text-transform:uppercase;letter-spacing:.06em;color:var(--acc);font-weight:700}
+.cxh label{display:flex;gap:8px;align-items:center;font-size:14px}.cxh input{accent-color:var(--acc);width:160px}
+.cxg{display:grid;grid-template-columns:1fr 1fr;gap:16px}.cxt{font-size:13px;font-weight:600;margin-bottom:4px}
+.cxg svg{display:block;width:100%;height:auto;color:var(--ink)}
+.cv{fill:none;stroke:var(--ink);stroke-width:2}.cv.f{stroke:var(--bar);stroke-width:1.5}.cv.c{stroke:var(--acc);stroke-width:3}.t.te{text-anchor:end}
+.cxr{font-size:14px;margin-top:12px;line-height:1.6}
+@media (max-width:860px){.cxg{grid-template-columns:1fr}}
+#info{margin-bottom:36px}
+h3.sh{font-size:clamp(26px,3.4vw,40px);letter-spacing:-.035em;line-height:1;margin:0 0 10px}
+.ex2 .pb p{font-weight:400;font-size:18px;max-width:70ch}
+.sn{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-bottom:12px}
+.sn button{all:unset;cursor:pointer;padding:10px 16px;background:var(--surf);font-weight:600}
+.sn button.pri{background:var(--acc);color:var(--on)}.sn button[disabled]{opacity:.4;cursor:default}
+.sn button:focus-visible,.sl li:focus-visible,.edr button:focus-visible{outline:2px solid var(--acc);outline-offset:2px}
+.sn span{font-size:14px;color:var(--ink2);margin-left:4px}
+.sl{list-style:none;margin:0;padding:0}
+.sl li{display:grid;grid-template-columns:40px 1fr;gap:12px;padding:14px;cursor:pointer}
+.sl li.on{background:var(--surf)}
+.sl .num{font-size:28px;font-weight:700;line-height:1;color:var(--ink2)}.sl li.on .num{color:var(--acc)}
+.sl b{display:block;font-size:18px;letter-spacing:-.01em;line-height:1.25;margin-bottom:2px}
+.sl p{margin:0;font-size:15px;color:var(--ink2)}.sl li.on p{color:var(--ink)}
+.edr{padding:8px 10px 0}.edr button{all:unset;cursor:pointer;padding:8px 16px;background:var(--acc);color:var(--on);font:700 14px "Instrument Sans",system-ui,sans-serif}
+#ed .edw{margin-top:8px;display:flex;overflow:hidden;background:var(--bg)}
+#ed .gut{padding:12px 8px 12px 12px;line-height:20.25px;text-align:right;color:var(--ink2);min-width:42px}
+.gut .on{color:var(--acc);font-weight:700}
+.cw{position:relative;flex:1;min-width:0}
+.hb{position:absolute;inset:0;overflow:hidden;pointer-events:none}
+.hb i{position:absolute;left:0;right:0;background:color-mix(in srgb,var(--acc) 20%,transparent);border-left:3px solid var(--acc)}
+#ed .hl2,#ed textarea.cpp{position:absolute;inset:0;margin:0;border:0;padding:12px 12px 12px 10px;font:13.5px/20.25px ui-monospace,Menlo,Consolas,monospace;white-space:pre;tab-size:4;width:100%;height:100%;box-sizing:border-box}
+#ed .hl2{overflow:hidden;pointer-events:none;color:var(--ink)}
+#ed textarea.cpp{background:transparent;color:transparent;-webkit-text-fill-color:transparent;caret-color:var(--ink);resize:none;overflow:auto;z-index:1}
+.tk{color:var(--acc)}.tc{color:var(--ink2);font-style:italic}
+.sin{padding:8px 12px;border-top:1px solid var(--bar);font-size:14px}.sin summary{cursor:pointer;font-weight:600}
+.sin textarea{display:block;width:100%;margin-top:8px;background:var(--bg);color:var(--ink);border:1px solid var(--bar);font:13.5px ui-monospace,Menlo,Consolas,monospace;padding:8px;resize:vertical}
+.smode{font-size:13px;color:var(--ink2);margin:0 0 10px}
+.sn button.ex{background:transparent;box-shadow:inset 0 0 0 1px var(--ink)}
+.sl li.none{display:block;cursor:default}
+.msg{font-size:20px;font-weight:600;letter-spacing:-.01em;min-height:1.5em;margin:12px 0 2px}
+.stat{font-size:14px;color:var(--ink2);margin-bottom:36px}
+.info{display:grid;grid-template-columns:1fr 1fr;gap:28px 40px;padding-top:24px;border-top:2px solid var(--ink)}
+.info h4{margin:0 0 6px;font-size:13px;text-transform:uppercase;letter-spacing:.06em;color:var(--acc);font-weight:700}
+.info p{margin:0;white-space:pre-line}
+.info .w{grid-column:1/-1}
+code{font:500 15px ui-monospace,Menlo,Consolas,monospace;white-space:pre-wrap}
+details summary{cursor:pointer;font-weight:600;margin-top:8px}
+@media (max-width:860px){
+ .app{grid-template-columns:1fr;gap:20px}
+ nav{flex-direction:row;overflow-x:auto;gap:4px;align-items:center}
+ nav button{white-space:nowrap}nav h3{margin:0 4px 0 12px;white-space:nowrap}
+ .info{grid-template-columns:1fr}.wrap{padding:0 16px 48px}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+<div class="top"><b>Stepwise Lab</b><span>Arrays · Lists · Stacks · Queues · Trees</span></div>
+<h1>Type a value. Watch the structure <em>change.</em></h1>
+<div class="app">
+<nav id="nav" aria-label="Topics"></nav>
+<main>
+ <h2 id="title"></h2>
+ <div class="stage" id="stage" role="img" aria-label="Data structure diagram"></div>
+ <div class="ctl"><input type="text" id="v" aria-label="Value"><input type="text" id="i" aria-label="Second input"><span id="ops" style="display:contents"></span></div>
+ <div class="ctl"><button id="reset">Reset</button><label>Speed <input type="range" id="spd" min="1" max="100" value="70"></label></div>
+ <div class="msg" id="msg" aria-live="polite"></div>
+ <div class="stat" id="stat"></div>
+ <div class="info" id="info"></div>
+ <div class="cxw" id="cx"><div class="cxh"><h4>Complexity graph</h4><label>What if n = <b id="cxn">5</b> <input type="range" id="cxs" min="1" max="64" value="5" aria-label="Input size n"></label></div><div class="cxg"><div><div class="cxt">Time: operations vs n</div><div id="cxT"></div></div><div><div class="cxt">Space: memory units vs n</div><div id="cxS"></div></div></div><div class="cxr" id="cxr"></div></div>
+ <div class="ex2" id="ex2"></div>
+ 
+</main>
+</div>
+</div>
+<script>
+const $=s=>document.querySelector(s),num=s=>s===''?NaN:+s,V=()=>$('#v').value.trim(),I=()=>$('#i').value.trim();
+const TOPICS=[
+{u:'Unit III · Arrays and Linked Lists',id:'a1',n:'Storing game entries in an array',lab:'array',ph:['Value','Index (optional)'],
+d:'An array is a fixed-capacity, contiguous block of same-typed items addressed by index. A scoreboard keeps its entries in an array plus a count of used slots; inserting a new entry means shifting later entries to make room.',
+f:'address(a[i]) = base + i × size\nInsert at i: shifts = n − i\nRemove at i: shifts = n − i − 1',
+t:'Access a[i]: O(1)\nSearch: O(n)\nInsert / remove at index i: O(n) (O(1) at the end)',sp:'O(N) for capacity N; O(1) extra per operation',
+ex:'A scoreboard holds [100, 90, 70, 40]. Insert 80 at index 2. How many entries shift, and what is the array?',ans:'n − i = 4 − 2 = 2 entries (70 and 40) shift right → [100, 90, 80, 70, 40].'},
+{u:'',id:'a2',n:'Sorting an array',lab:'array',ph:['Value','Index (optional)'],
+d:'Insertion sort grows a sorted prefix: take the next entry and swap it left until the entry before it is not larger. High-score tables use it to place a new entry. Press Sort to watch every swap.',
+f:'Comparisons ≤ n(n − 1) / 2 (worst)\nComparisons ≥ n − 1 (best)\nSwaps = number of inversions',
+t:'Best O(n) (already sorted)\nAverage and worst O(n²)',sp:'O(1), sorts in place',
+ex:'Sort [5, 2, 4, 1] with insertion sort. How many swaps?',ans:'Inversions: (5,2), (5,4), (5,1), (2,1), (4,1) = 5 swaps → [1, 2, 4, 5].'},
+{u:'',id:'a3',n:'Two-dimensional arrays and positional games',lab:'grid',ph:['Row (0–2)','Column (0–2)'],
+d:'A 2-D array board[r][c] stores a grid in row-major order. Positional games such as tic-tac-toe keep one mark per cell and check rows, columns and diagonals for a win.',
+f:'flat index = r × cols + c\ncells = rows × cols',
+t:'Read or write a cell: O(1)\nWin check on an n × n board: O(n²) (O(n) if only the touched lines are checked)',sp:'O(rows × cols)',
+ex:'In a 3 × 3 board, which flat index is board[2][1]?',ans:'2 × 3 + 1 = 7.'},
+{u:'',id:'l1',n:'Singly linked list: insert and remove at the front',lab:'list',kind:'s',ph:['Value',''],
+d:'A singly linked list is a chain of nodes, each holding data and a next pointer. head points to the first node and the last node points to null. Nodes need not be contiguous, so the list grows without shifting anything.',
+f:'insertFront: n→next = head; head = n\nremoveFront: t = head; head = head→next; delete t',
+t:'Insert / remove at front: O(1)\nInsert at back: O(1) with a tail pointer\nRemove at back: O(n)\nSearch: O(n)',sp:'O(n): one node (data + 1 pointer) per element',
+ex:'List 4 → 9 → 16. Do insertFront(2), then removeFront() twice. What remains?',ans:'2 → 4 → 9 → 16, then remove 2, then remove 4: the list is 9 → 16.'},
+{u:'',id:'l2',n:'Doubly linked list: insertion and removal',lab:'list',kind:'d',ph:['Value',''],
+d:'Each node has prev and next pointers, so you can walk both ways and unlink a node in O(1) once you hold a pointer to it. Header and trailer sentinel nodes remove the special cases at the ends.',
+f:'insert n after p: n→prev = p; n→next = p→next; p→next→prev = n; p→next = n\nremove p: p→prev→next = p→next; p→next→prev = p→prev',
+t:'Insert / remove at either end: O(1)\nSearch: O(n)',sp:'O(n): two pointers per node',
+ex:'Why is removeBack O(1) here but O(n) in a singly linked list?',ans:'tail→prev hands you the predecessor directly. A singly list must walk from head to find it.'},
+{u:'',id:'l3',n:'Circularly linked lists',lab:'list',kind:'c',ph:['Value',''],
+d:'In a circular list the last node points back to the first, so no pointer is null. Keeping a cursor on the tail gives access to both ends, and advancing the cursor rotates the list, as in round-robin scheduling.',
+f:'tail→next = head\nadvance: cursor = cursor→next',
+t:'Insert front / back: O(1) with a tail pointer\nRemove front: O(1)\nRemove back: O(n)\nRotate: O(1)',sp:'O(n)',
+ex:'Tasks A, B, C in a circular list, cursor at A. After 5 advances, which task is at the cursor?',ans:'5 mod 3 = 2, so two steps past A: C.'},
+{u:'',id:'l4',n:'Reversing a linked list',lab:'list',kind:'s',ph:['Value',''],
+d:'Reversing a singly linked list flips every next pointer using three pointers (prev, cur, next) in a single pass, with no extra list. Press Reverse on the list above.',
+f:'while cur ≠ null: next = cur→next; cur→next = prev; prev = cur; cur = next\nhead = prev',
+t:'O(n): one pass',sp:'O(1): three pointers',
+ex:'Reverse 1 → 2 → 3. What is prev after each loop iteration?',ans:'prev = 1, then 2, then 3. head = 3, so the list is 3 → 2 → 1.'},
+{u:'Unit IV · Stacks and Queues',id:'s1',n:'Stack ADT: array-based and STL',lab:'stack',ph:['Value',''],
+d:'A stack is LIFO: the last item pushed is the first popped. ADT: push(x), pop(), top(), size(), empty(). STL: std::stack<int> s; s.push(1); s.top(); s.pop();. The array version keeps t, the index of the top (−1 when empty); a linked version pushes and pops at the list head.',
+f:'push: S[++t] = x\npop: return S[t--]\nsize = t + 1\noverflow when t = N − 1',
+t:'push, pop, top, size, empty: all O(1)',sp:'O(N) for the array; O(n) for a linked stack',
+ex:'Push 3, 8, 5, then pop twice. What does top() return?',ans:'The pops return 5 then 8, so top() = 3 and size = 1.'},
+{u:'',id:'s2',n:'Reversing a vector using a stack',lab:'stack',ph:['Vector e.g. 1,2,3,4',''],
+d:'Push every element of the vector onto a stack, then pop them one by one into the output. LIFO order reverses the sequence. Type a vector and press Reverse vector.',
+f:'for x in v: push(x)\nfor k = 0 … n − 1: out[k] = pop()',
+t:'O(n): n pushes and n pops',sp:'O(n) extra for the stack',
+ex:'Reverse [1, 2, 3, 4] with a stack. What is popped first?',ans:'4, then 3, 2, 1, giving [4, 3, 2, 1].'},
+{u:'',id:'q1',n:'Queue ADT: STL and array-based interface',lab:'queue',ph:['Value',''],
+d:'A queue is FIFO: enqueue at the rear, dequeue from the front. ADT: enqueue, dequeue, front, size, empty. STL: std::queue<int> q; q.push(x); q.front(); q.pop();. A circular array reuses freed slots by wrapping indices modulo N.',
+f:'rear slot = (f + n) mod N\ndequeue: f = (f + 1) mod N, n = n − 1',
+t:'enqueue, dequeue, front: all O(1)',sp:'O(N) fixed array',
+ex:'N = 8, f = 6, n = 3. Which slot does the next enqueue use?',ans:'(6 + 3) mod 8 = 1.'},
+{u:'Unit V · Trees',id:'t1',n:'Tree definitions, depth and height',lab:'tree',ph:['Number',''],
+d:'A tree is a hierarchy: one root, every other node has one parent, and nodes without children are leaves. Depth of a node = edges from the root; height of the tree = edges on the longest root-to-leaf path. A binary tree allows at most two children (left, right). Try Depth of value and Height.',
+f:'depth(root) = 0, height(leaf) = 0\nh + 1 ≤ n ≤ 2^(h+1) − 1\nleaves ≤ 2^h',
+t:'depth(v): O(depth)\nheight(T): O(n)\nsize(T): O(n)',sp:'O(n) nodes; O(h) recursion',
+ex:'A full binary tree has height 3. How many nodes and leaves?',ans:'2⁴ − 1 = 15 nodes and 2³ = 8 leaves.'},
+{u:'',id:'t2',n:'Preorder, inorder and postorder traversals',lab:'tree',ph:['Number',''],
+d:'A traversal visits every node once. Preorder: node, left, right. Inorder: left, node, right (sorted order for a BST). Postorder: left, right, node, so children come before their parent, which is how sizes are computed and trees are deleted.',
+f:'T(n) = T(left) + T(right) + O(1) = O(n)',
+t:'Every traversal: O(n)',sp:'O(h) call stack: O(log n) balanced, O(n) skewed',
+ex:'Root 50 with children 30 (left) and 70 (right). Give the preorder and postorder.',ans:'Preorder: 50, 30, 70. Postorder: 30, 70, 50.'},
+{u:'',id:'t3',n:'Binary tree ADT and linked structure',lab:'tree',ph:['Number',''],
+d:'In the linked structure each node stores an element and left and right pointers (optionally parent). ADT: root(), left(p), right(p), parent(p), isRoot(), isExternal(). Insert by the BST rule (smaller goes left, larger right) or by level order (first free child slot).',
+f:'node = { v, left, right }\nBST insert: go left if x < v, else right\narray form: children of i are 2i + 1 and 2i + 2',
+t:'BST insert / search: O(h) = O(log n) balanced, O(n) skewed\nLevel-order insert: O(n)',sp:'O(n)',
+ex:'Insert 40, 20, 60, 10 into an empty BST. What is the height?',ans:'40 is the root, 20 left, 60 right, 10 under 20. Height = 2.'}
+];
+let T,hl=[],msg='',timer,A,Gd,turn,Ls,St,Ou,Q,Tr;
+const svg=(w,h,b)=>`<svg viewBox="0 0 ${w} ${h}" width="${w}" height="${h}"><defs><marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10z" fill="currentColor"/></marker></defs>${b}</svg>`;
+const sh=n=>`${n} entr${n==1?'y':'ies'}`;
+function bst(v){const n={v,l:null,r:null};if(!Tr){Tr=n;return 1}let c=Tr;for(;;){if(v===c.v)return 0;const k=v<c.v?'l':'r';if(!c[k]){c[k]=n;return 1}c=c[k]}}
+const path=(n,v)=>{if(!n)return null;if(n.v===v)return[v];const p=path(n.l,v)||path(n.r,v);return p&&[n.v,...p]};
+function lvl(v){const n={v,l:null,r:null};if(!Tr){Tr=n;return}const q=[Tr];while(q.length){const c=q.shift();if(!c.l){c.l=n;return}if(!c.r){c.r=n;return}q.push(c.l,c.r)}}
+const ht=n=>n?1+Math.max(ht(n.l),ht(n.r)):-1,cnt=n=>n?1+cnt(n.l)+cnt(n.r):0,lv=n=>n?(!n.l&&!n.r?1:lv(n.l)+lv(n.r)):0;
+function init(){A=[12,7,25,3,18];Gd=Array(9).fill('');turn='X';Ls=['4','9','16'];St=[];Ou=[];Q={a:Array(8).fill(null),f:0,n:0};Tr=null;[50,30,70,20,40,60].forEach(bst);hl=[]}
+function anim(f){clearTimeout(timer);let k=0;(function go(){if(k<f.length){f[k++]();draw();timer=setTimeout(go,Math.max(120,900*(1-$('#spd').value/100)))}})()}
+const trav=t=>{const o=[];(function w(n){if(!n)return;if(t=='pre')o.push(n.v);w(n.l);if(t=='in')o.push(n.v);w(n.r);if(t=='post')o.push(n.v)})(Tr);const f=o.map((x,k)=>()=>{hl=[x];msg=`${t}order: ${o.slice(0,k+1).join(' → ')}`});f.push(()=>{hl=[];msg+='  ✓ done, O(n)'});anim(f)};
+const OPS={
+array:[['Insert at index',()=>{const v=num(V());if(isNaN(v))return msg='Enter a number first';if(A.length>=10)return msg='Array is full (capacity 10)';let i=num(I());if(isNaN(i))i=A.length;i=Math.max(0,Math.min(A.length,i|0));const s=A.length-i;A.splice(i,0,v);hl=[i];msg=`Inserted ${v} at index ${i}; shifted ${sh(s)} right → O(n)`}],
+['Remove at index',()=>{if(!A.length)return msg='Array is empty';let i=num(I());if(isNaN(i))i=A.length-1;i=Math.max(0,Math.min(A.length-1,i|0));const x=A.splice(i,1)[0],s=A.length-i;hl=[];msg=`Removed ${x} from index ${i}; shifted ${sh(s)} left → O(n)`}],
+['Search',()=>{const v=num(V()),k=A.indexOf(v);hl=k<0?[]:[k];msg=isNaN(v)?'Enter a number first':k<0?`${v} not found after ${A.length} comparisons`:`Found ${v} at index ${k} after ${k+1} comparisons`}],
+['Sort',()=>{const a=A.slice(),f=[];for(let i=1;i<a.length;i++)for(let j=i;j>0&&a[j-1]>a[j];j--){[a[j-1],a[j]]=[a[j],a[j-1]];const c=a.slice(),jj=j;f.push(()=>{A=c;hl=[jj-1,jj];msg=`Swap: ${c[jj-1]} moves left of ${c[jj]}`})}f.push(()=>{hl=[];msg='Sorted. Worst case O(n²), best case O(n)'});anim(f)}],
+['Randomize',()=>{A=Array.from({length:6},()=>1+Math.random()*50|0);hl=[];msg='New random array'}]],
+grid:[['Place mark',()=>{const r=num(V()),c=num(I());if(![r,c].every(x=>Number.isInteger(x)&&x>=0&&x<=2))return msg='Enter a row and a column, each 0–2';const k=r*3+c;if(Gd[k])return msg=`board[${r}][${c}] is taken`;Gd[k]=turn;hl=[k];const w=[[0,1,2],[3,4,5],[6,7,8],[0,3,6],[1,4,7],[2,5,8],[0,4,8],[2,4,6]].find(l=>l.every(j=>Gd[j]===turn));msg=`board[${r}][${c}] = ${turn}  (flat index ${r}×3+${c} = ${k})`+(w?`. ${turn} wins!`:'');if(w)hl=w;turn=turn=='X'?'O':'X'}],
+['Clear board',()=>{Gd=Array(9).fill('');turn='X';hl=[];msg='Board cleared'}]],
+list:[['Insert front',()=>{const v=V();if(!v)return msg='Enter a value';if(Ls.length>=7)return msg='Demo limit: 7 nodes';Ls.unshift(v);hl=[0];msg=`new node→next = head; head = new node → O(1)`}],
+['Remove front',()=>{if(!Ls.length)return msg='List is empty';const x=Ls.shift();hl=[];msg=`Removed ${x}: head = head→next, delete old head → O(1)`}],
+['Insert back',()=>{const v=V();if(!v)return msg='Enter a value';if(Ls.length>=7)return msg='Demo limit: 7 nodes';Ls.push(v);hl=[Ls.length-1];msg=T.kind=='d'?'tail→next = new node; new node→prev = tail → O(1)':'tail→next = new node; tail = new node → O(1) with a tail pointer (O(n) without)'}],
+['Remove back',()=>{if(!Ls.length)return msg='List is empty';const x=Ls.pop();hl=[];msg=T.kind=='d'?`Removed ${x}: tail = tail→prev → O(1)`:`Removed ${x}: walk to the node before tail → O(n)`}],
+['Reverse',()=>{Ls.reverse();hl=[];msg=T.kind=='d'?'Swap prev and next in every node → O(n)':'prev = null; loop: next = cur→next; cur→next = prev; prev = cur; cur = next → O(n), O(1) space'}]],
+stack:[['Push',()=>{const v=V();if(!v)return msg='Enter a value';if(St.length==8)return msg='Stack overflow (capacity 8)';St=St.concat([v]);hl=[St.length-1];msg=`push(${v}): S[++t] = ${v}, t = ${St.length-1} → O(1)`}],
+['Pop',()=>{if(!St.length)return msg='Stack underflow (empty)';const x=St[St.length-1];St=St.slice(0,-1);hl=[];msg=`pop() → ${x}; t = ${St.length-1} → O(1)`}],
+['Peek',()=>{if(!St.length)return msg='Stack is empty';hl=[St.length-1];msg=`top() = ${St[St.length-1]} (not removed)`}],
+['Reverse vector',()=>{const a=V().split(/[ ,]+/).filter(Boolean).slice(0,8);if(!a.length)return msg='Type a vector first, e.g. 1,2,3,4';St=[];Ou=[];const f=[];a.forEach(x=>f.push(()=>{St=St.concat([x]);hl=[St.length-1];msg=`push(${x})`}));a.forEach(()=>f.push(()=>{const x=St[St.length-1];St=St.slice(0,-1);Ou=Ou.concat([x]);hl=[];msg=`pop() → ${x}, append to output`}));f.push(()=>msg='Done: output is the reversed vector. O(n) time, O(n) space');anim(f)}]],
+queue:[['Enqueue',()=>{const v=V();if(!v)return msg='Enter a value';if(Q.n==8)return msg='Queue is full (N = 8)';const r=(Q.f+Q.n)%8;Q.a[r]=v;Q.n++;hl=[r];msg=`enqueue(${v}): rear slot = (${Q.f} + ${Q.n-1}) mod 8 = ${r} → O(1)`}],
+['Dequeue',()=>{if(!Q.n)return msg='Queue is empty (underflow)';const x=Q.a[Q.f];Q.a[Q.f]=null;Q.f=(Q.f+1)%8;Q.n--;hl=[];msg=`dequeue() → ${x}; f = (f + 1) mod 8 = ${Q.f} → O(1)`}],
+['Front',()=>{if(!Q.n)return msg='Queue is empty';hl=[Q.f];msg=`front() = ${Q.a[Q.f]} (not removed)`}]],
+tree:[['Insert (BST)',()=>{const v=num(V());if(isNaN(v))return msg='Enter a number';msg=bst(v)?`Inserted ${v}: left if smaller, right if larger → O(h)`:`${v} is already in the tree`;hl=[v]}],
+['Insert (level order)',()=>{const v=num(V());if(isNaN(v))return msg='Enter a number';if(path(Tr,v))return msg=`${v} is already in the tree`;lvl(v);hl=[v];msg=`Inserted ${v} in the first free child slot (breadth-first) → O(n)`}],
+['Preorder',()=>trav('pre')],['Inorder',()=>trav('in')],['Postorder',()=>trav('post')],
+['Depth of value',()=>{const v=num(V()),p=path(Tr,v);if(!p)return msg='Value not in the tree';hl=p;msg=`depth(${v}) = ${p.length-1} edges from the root: ${p.join(' → ')}`}],
+['Height',()=>{hl=[];msg=`height = ${ht(Tr)} (edges on the longest root-to-leaf path)`}]]};
+const dArr=()=>{let s='';for(let i=0;i<10;i++){const x=20+i*62,v=A[i],h=hl.includes(i)?'hl':'';s+=`<rect class="nb ${h}${v===undefined?' em':''}" x="${x}" y="24" width="56" height="56"/>`+(v!==undefined?`<text class="tx ${h}" x="${x+28}" y="52">${v}</text>`:'')+`<text class="t" x="${x+28}" y="102">[${i}]</text>`}return svg(660,116,s)};
+const dGrid=()=>{let s='';for(let k=0;k<9;k++){const x=16+(k%3)*96,y=12+(k/3|0)*96,h=hl.includes(k)?'hl':'';s+=`<rect class="nb ${h}" x="${x}" y="${y}" width="90" height="90"/><text class="tx ${h}" style="font-size:34px" x="${x+45}" y="${y+40}">${Gd[k]}</text><text class="t" ${h?'style="fill:var(--on)"':''} x="${x+45}" y="${y+76}">[${k/3|0}][${k%3}] = ${k}</text>`}return svg(310,310,s)};
+const dList=()=>{const k=T.kind,n=Ls.length;if(!n)return svg(300,90,'<text class="t" x="150" y="45">head = null (empty list)</text>');const w=k=='d'?108:90,p=w+56;let s='';
+Ls.forEach((v,i)=>{const x=30+i*p,y=56,h=hl.includes(i)?'hl':'',nx=x+p;
+s+=`<rect class="nb ${h}" x="${x}" y="${y}" width="${w}" height="44"/>`;
+if(k=='d'){s+=`<line class="ln" x1="${x+26}" y1="${y}" x2="${x+26}" y2="${y+44}"/><line class="ln" x1="${x+82}" y1="${y}" x2="${x+82}" y2="${y+44}"/><text class="tx ${h}" x="${x+54}" y="${y+22}">${v}</text><text class="t" ${h?'style="fill:var(--on)"':''} x="${x+13}" y="${y+22}">◂</text><text class="t" ${h?'style="fill:var(--on)"':''} x="${x+95}" y="${y+22}">▸</text>`;
+if(i<n-1)s+=`<line class="ar" x1="${x+w}" y1="${y+14}" x2="${nx}" y2="${y+14}" marker-end="url(#a)"/><line class="ar" x1="${nx}" y1="${y+32}" x2="${x+w}" y2="${y+32}" marker-end="url(#a)"/>`}
+else{s+=`<line class="ln" x1="${x+58}" y1="${y}" x2="${x+58}" y2="${y+44}"/><text class="tx ${h}" x="${x+29}" y="${y+22}">${v}</text><text class="t" ${h?'style="fill:var(--on)"':''} x="${x+74}" y="${y+22}">●</text>`;if(i<n-1)s+=`<line class="ar" x1="${x+74}" y1="${y+22}" x2="${nx}" y2="${y+22}" marker-end="url(#a)"/>`}
+s+=`<text class="t" x="${x+w/2}" y="${y-12}">${i==0&&i==n-1?'head, tail':i==0?'head':i==n-1?'tail':''}</text>`});
+const lx=30+(n-1)*p;if(k=='c')s+=`<path class="ar" d="M${lx+w/2} 100 v26 H${30+w/2} V104" marker-end="url(#a)"/><text class="t" x="${30+(n-1)*p/2+w/2}" y="142">tail→next = head</text>`;
+else s+=`<line class="ar" x1="${lx+(k=='d'?95:74)}" y1="78" x2="${lx+w+36}" y2="78" marker-end="url(#a)"/><text class="t" x="${lx+w+52}" y="82">null</text>`;
+return svg(60+n*p+(k=='c'?0:40),k=='c'?154:116,s)};
+const dStack=()=>{let s='';for(let i=0;i<8;i++){const y=290-i*36,v=St[i],h=hl.includes(i)?'hl':'';s+=`<rect class="nb ${h}${v===undefined?' em':''}" x="60" y="${y}" width="120" height="32"/>`+(v!==undefined?`<text class="tx ${h}" x="120" y="${y+16}">${v}</text>`:'')+`<text class="t" x="40" y="${y+20}">${i}</text>`}if(St.length)s+=`<text class="t" x="210" y="${290-(St.length-1)*36+20}">← top</text>`;return svg(260,330,s)};
+const dQ=()=>{let s='';const r=(Q.f+Q.n-1+8)%8;for(let i=0;i<8;i++){const x=16+i*80,v=Q.a[i],h=hl.includes(i)?'hl':'';s+=`<rect class="nb ${h}${v==null?' em':''}" x="${x}" y="40" width="72" height="52"/>`+(v!=null?`<text class="tx ${h}" x="${x+36}" y="66">${v}</text>`:'')+`<text class="t" x="${x+36}" y="30">${i}</text>`;if(Q.n&&(i==Q.f||i==r))s+=`<text class="t" style="fill:var(--acc);font-weight:700" x="${x+36}" y="116">${i==Q.f&&i==r?'f, r':i==Q.f?'front f':'rear r'}</text>`}return svg(660,128,s)};
+const dTree=()=>{if(!Tr)return svg(300,80,'<text class="t" x="150" y="40">root = null</text>');let c=0;(function w(n,d){if(!n)return;w(n.l,d+1);n.x=36+c++*56;n.y=34+d*66;w(n.r,d+1)})(Tr,0);let e='',nd='';(function w(n){if(!n)return;[n.l,n.r].forEach(ch=>{if(ch){e+=`<line class="ln" x1="${n.x}" y1="${n.y}" x2="${ch.x}" y2="${ch.y}"/>`;w(ch)}});const h=hl.includes(n.v)?'hl':'';nd+=`<circle class="nb ${h}" cx="${n.x}" cy="${n.y}" r="20"/><text class="tx ${h}" x="${n.x}" y="${n.y}">${n.v}</text>`})(Tr);return svg(c*56+16,(ht(Tr)+1)*66+10,e+nd)};
+const R=(x,y,w,h,s,c='')=>`<rect class="nb ${c}" x="${x}" y="${y}" width="${w}" height="${h}"/>`+(s===''?'':`<text class="tx ${c}" x="${x+w/2}" y="${y+h/2}">${s}</text>`),
+L=(x,y,s,k='')=>`<text class="t ${k}" x="${x}" y="${y}">${s}</text>`,
+AR=(a,b,c,d,k='')=>`<line class="ar ${k}" x1="${a}" y1="${b}" x2="${c}" y2="${d}" marker-end="url(#a)"/>`,
+PA=(d,k='')=>`<path class="ar ${k}" d="${d}" marker-end="url(#a)"/>`,
+CI=(x,y,v,c='')=>`<circle class="nb ${c}" cx="${x}" cy="${y}" r="16"/><text class="tx ${c}" x="${x}" y="${y}">${v}</text>`,
+LN=(a,b,c,d)=>`<line class="ln" x1="${a}" y1="${b}" x2="${c}" y2="${d}"/>`,
+NS=(x,y,v,c='')=>R(x,y,76,34,'',c)+LN(x+50,y,x+50,y+34)+`<text class="tx ${c}" x="${x+25}" y="${y+17}">${v}</text><text class="tx ${c}" x="${x+63}" y="${y+17}">●</text>`;
+const CD={
+a1:()=>{let s=L(10,16,'Contiguous memory: address(a[i]) = base + i × size  (base 1000, size 4)','tl'),b=[100,90,70,40,''],c=[100,90,80,70,40];b.forEach((v,i)=>{s+=R(10+i*76,28,70,36,v,v===''?'em':'')+L(45+i*76,78,1000+4*i)+R(10+i*76,122,70,36,c[i],i==2?'hl':'')});s+=L(10,112,'After insert(80, index 2): n − i = 2 entries shift right','tl ac')+AR(197,86,273,120,'ac')+AR(273,86,349,120,'ac');return svg(400,170,s)},
+a2:()=>{let s=L(10,16,'Dark cells = sorted prefix. Each new entry slides left past larger ones.','tl');[[5,2,4,1],[2,5,4,1],[2,4,5,1],[1,2,4,5]].forEach((r,k)=>{r.forEach((v,i)=>{s+=R(10+i*56,28+k*48,50,38,v,i<=k?'dn':'')});s+=L(250,52+k*48,['start: prefix is just [5]','insert 2: 1 swap','insert 4: 1 swap','insert 1: 3 swaps'][k],'tl')});return svg(470,230,s)},
+a3:()=>{let s=L(10,16,'board[r][c] is stored row by row: index = r × cols + c','tl');for(let k=0;k<9;k++){const r=k/3|0,c=k%3,h=k==7?'hl':'';s+=R(10+c*66,28+r*66,60,60,`[${r}][${c}]`,h)+R(236+k*44,76,40,40,k,h)}s+=L(300,138,'row 0')+L(432,138,'row 1')+L(564,138,'row 2')+L(236,164,'board[2][1] → 2 × 3 + 1 = 7','tl ac');return svg(640,230,s)},
+l1:()=>{let s=L(10,18,'insertFront(2):  ① n→next = head   ② head = n','tl ac')+L(10,52,'head','tl')+AR(40,45,58,45);[2,4,9,16].forEach((v,i)=>{s+=NS(60+i*100,28,v,i?'':'hl');if(i<3)s+=AR(136+i*100,45,160+i*100,45)});s+=L(470,50,'null','tl')+L(10,112,'removeFront():  head = head→next; delete old head','tl ac')+L(18,184,'head','tl')+PA('M26 168 Q90 196 158 148','ac');[2,4,9,16].forEach((v,i)=>{s+=NS(60+i*100,128,v,i?'':'em');if(i&&i<3)s+=AR(136+i*100,145,160+i*100,145)});s+=L(470,150,'null','tl');return svg(520,205,s)},
+l2:()=>{const X=[10,150,290,430],nm=['header',4,9,'trailer'];let s=L(10,20,'Sentinels make every insert and remove the same pointer edit','tl')+L(10,132,'remove(9):  p→prev→next = p→next;  p→next→prev = p→prev','tl ac');for(let r=0;r<2;r++){const y=r?150:40;X.forEach((x,i)=>{s+=R(x,y,100,36,nm[i],r&&i==2?'em':'')});for(let i=0;i<3;i++)if(!r||i==0)s+=AR(X[i]+100,y+11,X[i+1],y+11)+AR(X[i+1],y+25,X[i]+100,y+25);if(r)s+=PA(`M250 ${y+6} Q340 ${y-34} 428 ${y+6}`,'ac')+PA(`M432 ${y+30} Q340 ${y+70} 252 ${y+30}`,'ac')}return svg(540,230,s)},
+l3:()=>{const cx=170,cy=105,r=70,P=[0,1,2,3].map(i=>{const a=(i*90-90)*Math.PI/180;return[cx+r*Math.cos(a),cy+r*Math.sin(a)]});let s='';P.forEach((p,i)=>{const q=P[(i+1)%4],dx=q[0]-p[0],dy=q[1]-p[1],d=Math.hypot(dx,dy),u=[dx/d,dy/d];s+=AR(p[0]+u[0]*20,p[1]+u[1]*20,q[0]-u[0]*20,q[1]-u[1]*20,i==3?'ac':'')});P.forEach((p,i)=>{s+=CI(p[0],p[1],[4,9,16,25][i],i==3?'hl':'')});s+=L(170,10,'head')+L(62,109,'tail')+L(300,70,'The last node points back to the first','tl')+L(300,96,'tail→next = head, no null pointer','tl ac')+L(300,122,'rotate: cursor = cursor→next','tl');return svg(560,200,s)},
+l4:()=>{let s='';const D=['RRR','LRR','LLR','LLL'],TT=['start: cur = 1, prev = null','step 1: 1→null','step 2: 2→1','step 3: 3→2, head = prev = 3'],PV=[28,108,198,288],CV=[108,198,288,360];D.forEach((d,r)=>{const y=14+r*58;s+=L(28,y+21,'null')+L(360,y+21,'null')+L(400,y+21,TT[r],r==3?'tl ac':'tl');for(let k=0;k<3;k++){const x=80+k*90;s+=R(x,y,56,34,k+1);s+=d[k]=='R'?AR(x+56,y+17,k<2?x+88:344,y+17):AR(x,y+17,k?x-34:44,y+17)}s+=L(PV[r],y+50,'prev','ac')+L(CV[r],y+50,'cur')});return svg(640,250,s)},
+s1:()=>{let s=L(300,16,'LIFO: last in, first out','tl');const it=[3,8,5];for(let i=0;i<4;i++)s+=R(80,40+(3-i)*36,70,32,it[i]??'',it[i]===undefined?'em':'')+L(60,40+(3-i)*36+20,i);s+=AR(115,14,115,38,'ac')+L(160,28,'push(x): S[++t] = x','tl ac')+AR(152,92,236,92,'ac')+L(244,96,'pop() → 5, t = t − 1','tl ac')+L(300,134,'the same stack as an array S[ ], top index t','tl');[3,8,5,''].forEach((v,i)=>{s+=R(300+i*52,142,46,36,v,v===''?'em':'')+L(323+i*52,196,i)});s+=L(427,214,'t = 2','ac');return svg(560,225,s)},
+s2:()=>{let s=L(10,16,'input v','tl')+L(250,16,'stack','tl')+L(430,16,'output','tl');[1,2,3,4].forEach((v,i)=>{s+=R(10+i*44,96,40,36,v)+R(250,30+(3-i)*36,70,32,v)+R(430+i*44,96,40,36,4-i)});s+=AR(190,114,246,114,'ac')+L(218,90,'push 1…4','ac')+AR(324,114,426,114,'ac')+L(375,90,'pop 4…1','ac');return svg(620,185,s)},
+q1:()=>{let s='',v={6:5,7:8,0:2};for(let i=0;i<8;i++)s+=R(10+i*64,34,58,44,v[i]??'',i in v?'hl':'em')+L(39+i*64,26,i);s+=L(423,98,'front f = 6','ac')+L(103,98,'next rear slot = 1','ac')+PA('M487 82 v26 H39 V84')+L(270,128,'wrap around: index = (i + 1) mod N')+L(10,148,'rear slot = (f + n) mod N = (6 + 3) mod 8 = 1','tl');return svg(530,156,s)},
+t1:()=>{const P={50:[260,40],30:[160,106],70:[360,106],20:[110,172],40:[210,172],60:[310,172],80:[410,172]};let s='<ellipse cx="160" cy="140" rx="88" ry="64" fill="none" stroke="var(--acc)" stroke-dasharray="5 4" stroke-width="2"/>';[[50,30],[50,70],[30,20],[30,40],[70,60],[70,80]].forEach(([a,b])=>s+=LN(...P[a],...P[b]));for(const k in P)s+=CI(P[k][0],P[k][1],k,k==50?'hl':'');[0,1,2].forEach(d=>s+=L(10,44+d*66,'depth '+d,'tl'));s+=L(284,44,'root','tl ac')+L(260,110,'siblings')+L(70,70,'subtree of 30','tl ac')+L(260,226,'leaves: nodes with no children')+LN(480,40,480,172)+LN(474,40,486,40)+LN(474,172,486,172)+L(495,110,'height = 2','tl ac')+L(495,130,'longest root-to-leaf path','tl');return svg(660,236,s)},
+t2:()=>{const N=[50,30,70,20,40,60],Q=[[110,30],[60,90],[160,90],[30,150],[90,150],[130,150]],E=[[0,1],[0,2],[1,3],[1,4],[2,5]],O=[[1,2,5,3,4,6],[4,2,6,1,3,5],[6,3,5,1,2,4]],H=['Preorder: node, left, right','Inorder: left, node, right','Postorder: left, right, node'],S=['50, 30, 20, 40, 70, 60','20, 30, 40, 50, 60, 70','20, 40, 30, 60, 70, 50'];let s='';for(let k=0;k<3;k++){const o=k*230;E.forEach(([a,b])=>s+=LN(o+Q[a][0],Q[a][1],o+Q[b][0],Q[b][1]));N.forEach((v,i)=>{s+=CI(o+Q[i][0],Q[i][1],v)+L(o+Q[i][0]+17,Q[i][1]-12,O[k][i],'tl ac')});s+=L(o+10,206,H[k],'tl')+L(o+10,226,S[k],'tl ac')}return svg(700,236,s)},
+t3:()=>{const TN=(x,y,v,l,r)=>R(x,y,28,32,l?'●':'∅')+R(x+28,y,34,32,v)+R(x+62,y,28,32,r?'●':'∅');let s=TN(210,20,40,1,1)+TN(100,100,20,1,0)+TN(320,100,60,0,0)+TN(30,180,10,0,0)+AR(224,52,148,98)+AR(272,52,362,98)+AR(114,132,78,178)+L(440,40,'Array form of the same tree','tl');[40,20,60,10,'','',''].forEach((v,i)=>{s+=R(430+i*38,52,34,34,v,v===''?'em':'')+L(447+i*38,104,i)});s+=L(430,134,'children of i: 2i + 1 and 2i + 2','tl ac')+L(430,154,'parent of i: ⌊(i − 1) / 2⌋','tl')+L(430,184,'Linked: node = { v, left, right }; ∅ = null','tl');return svg(700,225,s)}
+};
+const concept=id=>CD[id]?CD[id]():'';
+const EXP={"a1":{"s":[{"t":"Write down what you know","d":"The array holds [100, 90, 70, 40], so n = 4 (capacity 10). Insert x = 80 at index i = 2."},{"t":"Shift from the right end","d":"Entries from index i to the end move one slot right: n − i = 4 − 2 = 2 entries (70 and 40). Copy a[3] into a[4], then a[2] into a[3]. Going right to left overwrites nothing."},{"t":"Fill the gap","d":"Index 2 is now free, so a[2] = 80 and n becomes 5."},{"t":"Check the result","d":"The array is [100, 90, 80, 70, 40] and 2 entries shifted. One insert costs O(n)."}],"c":"#include <iostream>\nusing namespace std;\n\nint main() {\n    // Step 1: Write down what you know\n    int a[10] = {100, 90, 70, 40};\n    int n = 4, i = 2, x = 80, shifts = 0;\n\n    // Step 2: Shift from the right end\n    for (int k = n - 1; k >= i; k--) {   // shift right, last entry first\n        a[k + 1] = a[k];\n        shifts++;\n    }\n    // Step 3: Fill the gap\n    a[i] = x;                            // place the new entry\n    n++;\n\n    // Step 4: Check the result\n    cout << \"Entries shifted: \" << shifts << \"\\n\";\n    for (int k = 0; k < n; k++) cout << a[k] << \" \";\n    cout << \"\\n\";\n}"},"a2":{"s":[{"t":"Start with the array","d":"The input is [5, 2, 4, 1]. The first entry on its own already counts as a sorted prefix, and swaps starts at 0."},{"t":"Slide each entry left","d":"i = 1: 2 is less than 5, swap → [2, 5, 4, 1]. i = 2: 4 swaps past 5 → [2, 4, 5, 1]. i = 3: 1 slides past 5, 4 and 2 → [1, 2, 4, 5]. That is 1 + 1 + 3 swaps."},{"t":"Print the result","d":"The array is [1, 2, 4, 5] after 5 swaps, which equals the number of inversions in the input."}],"c":"#include <iostream>\n#include <algorithm>\nusing namespace std;\n\nint main() {\n    // Step 1: Start with the array\n    int a[] = {5, 2, 4, 1};\n    int n = 4, swaps = 0;\n\n    // Step 2: Slide each entry left\n    for (int i = 1; i < n; i++)                   // grow the sorted prefix\n        for (int j = i; j > 0 && a[j - 1] > a[j]; j--) {\n            swap(a[j - 1], a[j]);                 // slide left\n            swaps++;\n        }\n\n    // Step 3: Print the result\n    for (int k = 0; k < n; k++) cout << a[k] << \" \";\n    cout << \"\\nSwaps: \" << swaps << \"\\n\";\n}"},"a3":{"s":[{"t":"Declare the board","d":"A 3 × 3 array: rows = 3 and cols = 3. Every cell starts as a dot."},{"t":"Choose the cell","d":"Take board[2][1], so r = 2 and c = 1, and store X there."},{"t":"Convert to a flat index","d":"Row-major formula: index = r × cols + c = 2 × 3 + 1 = 7. Rows 0 and 1 use indices 0–5, row 2 starts at 6, and column 1 of it is 7."},{"t":"Print the grid","d":"Row by row, the X appears in the bottom row, middle column."}],"c":"#include <iostream>\nusing namespace std;\n\nint main() {\n    // Step 1: Declare the board\n    const int ROWS = 3, COLS = 3;\n    char board[ROWS][COLS];\n    for (int r = 0; r < ROWS; r++)\n        for (int c = 0; c < COLS; c++) board[r][c] = '.';\n\n    // Step 2: Choose the cell\n    int r = 2, c = 1;\n    board[r][c] = 'X';\n    // Step 3: Convert to a flat index\n    cout << \"flat index = \" << r * COLS + c << \"\\n\";\n\n    char* flat = &board[0][0];            // same memory, one dimension\n    cout << \"flat[7] = \" << flat[r * COLS + c] << \"\\n\";\n\n    // Step 4: Print the grid\n    for (int i = 0; i < ROWS; i++) {\n        for (int j = 0; j < COLS; j++) cout << board[i][j] << \" \";\n        cout << \"\\n\";\n    }\n}"},"l1":{"s":[{"t":"Build the list","d":"insertFront(16), then 9, then 4 builds 4 → 9 → 16, because each new node goes in front of the old head."},{"t":"Insert 2 at the front","d":"Create a node, set its next to head, then move head to the new node: 2 → 4 → 9 → 16."},{"t":"Remove from the front twice","d":"Save head in t, set head = head→next and delete t. The first call removes 2, the second removes 4."},{"t":"Read the result","d":"The list left is 9 → 16. Every operation touched only the head, so each was O(1)."}],"c":"#include <iostream>\nusing namespace std;\n\nstruct Node { int data; Node* next; };\nNode* head = nullptr;\n\nvoid insertFront(int x) { head = new Node{x, head}; }\n\nvoid removeFront() {\n    if (!head) return;\n    Node* t = head;\n    head = head->next;\n    delete t;\n}\n\nvoid print() {\n    for (Node* p = head; p; p = p->next) cout << p->data << \" -> \";\n    cout << \"null\\n\";\n}\n\nint main() {\n    // Step 1: Build the list\n    insertFront(16); insertFront(9); insertFront(4);\n    print();                 // 4 -> 9 -> 16\n    // Step 2: Insert 2 at the front\n    insertFront(2);\n    print();                 // 2 -> 4 -> 9 -> 16\n    // Step 3: Remove from the front twice\n    removeFront(); removeFront();\n    // Step 4: Read the result\n    print();                 // 9 -> 16\n}"},"l2":{"s":[{"t":"Create the sentinels","d":"The header and trailer nodes are linked to each other, so even the empty list has no null neighbours."},{"t":"Insert 4, 9 and 16","d":"Every insert is the same pointer edit before the trailer, with no special cases: header ⇄ 4 ⇄ 9 ⇄ 16 ⇄ trailer."},{"t":"Remove the back node in O(1)","d":"last = trailer→prev hands us the node with no walking. Then last→prev→next = trailer, trailer→prev = last→prev, and delete last. A singly list would walk from head: O(n)."},{"t":"Read the result","d":"The list is now 4 9."}],"c":"#include <iostream>\nusing namespace std;\n\nstruct Node { int data; Node *prev, *next; };\n\nint main() {\n    // Step 1: Create the sentinels\n    Node* header  = new Node{0, nullptr, nullptr};\n    Node* trailer = new Node{0, header, nullptr};\n    header->next = trailer;\n\n    auto insertBefore = [&](Node* p, int x) {   // insert x before p\n        Node* n = new Node{x, p->prev, p};\n        p->prev->next = n;\n        p->prev = n;\n    };\n    auto print = [&]() {\n        for (Node* p = header->next; p != trailer; p = p->next) cout << p->data << \" \";\n        cout << \"\\n\";\n    };\n\n    // Step 2: Insert 4, 9 and 16\n    insertBefore(trailer, 4);\n    insertBefore(trailer, 9);\n    insertBefore(trailer, 16);\n    print();                                     // 4 9 16\n\n    // Step 3: Remove the back node in O(1)\n    Node* last = trailer->prev;                  // O(1): no traversal\n    last->prev->next = trailer;\n    trailer->prev = last->prev;\n    delete last;\n    // Step 4: Read the result\n    print();                                     // 4 9\n}"},"l3":{"s":[{"t":"Link the circle","d":"A → B → C → A: the last node points back to the first, so no pointer is null."},{"t":"Place the cursor","d":"The cursor starts on A."},{"t":"Advance five times","d":"Each advance is cursor = cursor→next, giving B, C, A, B, C."},{"t":"Check with a shortcut","d":"5 mod 3 = 2, and two steps past A is C, so the cursor ends on C."}],"c":"#include <iostream>\nusing namespace std;\n\nstruct Node { char data; Node* next; };\n\nint main() {\n    // Step 1: Link the circle\n    Node* a = new Node{'A', nullptr};\n    Node* b = new Node{'B', nullptr};\n    Node* c = new Node{'C', nullptr};\n    a->next = b; b->next = c; c->next = a;       // circular: tail->next = head\n\n    // Step 2: Place the cursor\n    Node* cursor = a;\n    // Step 3: Advance five times\n    for (int i = 1; i <= 5; i++) {\n        cursor = cursor->next;                   // advance (rotate)\n        cout << \"advance \" << i << \": \" << cursor->data << \"\\n\";\n    }\n    // Step 4: Check with a shortcut\n    cout << \"5 mod 3 = \" << 5 % 3 << \", cursor at \" << cursor->data << \"\\n\";\n}"},"l4":{"s":[{"t":"Build 1 → 2 → 3","d":"Three nodes linked in order; head points at node 1."},{"t":"Set the two pointers","d":"prev starts as null and cur starts at the head (node 1)."},{"t":"Flip every link","d":"Iteration 1: 1→next = null, prev = 1. Iteration 2: 2→next = 1, prev = 2. Iteration 3: 3→next = 2, prev = 3, cur = null and the loop ends."},{"t":"Move the head","d":"head = prev = 3, so the list reads 3 → 2 → 1. One pass: O(n) time, O(1) space."}],"c":"#include <iostream>\nusing namespace std;\n\nstruct Node { int data; Node* next; };\n\nint main() {\n    // Step 1: Build 1 → 2 → 3\n    Node* head = new Node{1, new Node{2, new Node{3, nullptr}}};\n\n    // Step 2: Set the two pointers\n    Node *prev = nullptr, *cur = head;\n    // Step 3: Flip every link\n    while (cur) {\n        Node* next = cur->next;   // remember the rest\n        cur->next = prev;         // flip the link\n        prev = cur;               // advance prev\n        cur = next;               // advance cur\n        cout << \"prev = \" << prev->data << \"\\n\";\n    }\n    // Step 4: Move the head\n    head = prev;\n\n    for (Node* p = head; p; p = p->next) cout << p->data << \" \";\n    cout << \"\\n\";                 // 3 2 1\n}"},"s1":{"s":[{"t":"Start with an empty stack","d":"The array-based stack keeps t, the index of the top. t = −1 means empty."},{"t":"Push 3, 8 and 5","d":"push(x) does S[++t] = x, so t goes 0, 1, 2. From bottom to top the stack is 3, 8, 5."},{"t":"Pop twice","d":"pop() returns S[t--]: first 5, then 8, and t drops to 0."},{"t":"Read top and size","d":"top() is S[0] = 3 and size = t + 1 = 1. All of these are O(1)."},{"t":"Do the same with the STL","d":"std::stack gives the same results with push, pop and top."}],"c":"#include <iostream>\n#include <stack>\nusing namespace std;\n\nclass ArrayStack {\n    int S[100];\n    int t = -1;                        // index of the top\npublic:\n    void push(int x) { S[++t] = x; }\n    int  pop()       { return S[t--]; }\n    int  top() const { return S[t]; }\n    int  size() const { return t + 1; }\n    bool empty() const { return t < 0; }\n};\n\nint main() {\n    // Step 1: Start with an empty stack\n    ArrayStack s;\n    // Step 2: Push 3, 8 and 5\n    s.push(3); s.push(8); s.push(5);\n    // Step 3: Pop twice\n    cout << \"pop: \" << s.pop() << \"\\n\";   // 5\n    cout << \"pop: \" << s.pop() << \"\\n\";   // 8\n    // Step 4: Read top and size\n    cout << \"top: \" << s.top() << \", size: \" << s.size() << \"\\n\";\n\n    // Step 5: Do the same with the STL\n    stack<int> q;                          // the same with the STL\n    q.push(3); q.push(8); q.push(5);\n    q.pop(); q.pop();\n    cout << \"STL top: \" << q.top() << \"\\n\";\n}"},"s2":{"s":[{"t":"Take the vector","d":"v = [1, 2, 3, 4] and an empty stack."},{"t":"Push every element","d":"Pushing in order leaves the stack, bottom to top, as 1, 2, 3, 4."},{"t":"The first pop","d":"The first pop returns 4, the last element that was pushed."},{"t":"Pop back into the vector","d":"Each pop is written into v from index 0: 4, 3, 2, 1."},{"t":"Print the reversed vector","d":"v is [4, 3, 2, 1]. n pushes plus n pops: O(n) time and O(n) extra space."}],"c":"#include <iostream>\n#include <stack>\n#include <vector>\nusing namespace std;\n\nint main() {\n    // Step 1: Take the vector\n    vector<int> v = {1, 2, 3, 4};\n    stack<int> s;\n\n    // Step 2: Push every element\n    for (int x : v) s.push(x);                 // push 1, 2, 3, 4\n    // Step 3: The first pop\n    cout << \"first pop = \" << s.top() << \"\\n\"; // 4\n\n    // Step 4: Pop back into the vector\n    for (size_t i = 0; i < v.size(); i++) {    // pop into v\n        v[i] = s.top();\n        s.pop();\n    }\n    // Step 5: Print the reversed vector\n    for (int x : v) cout << x << \" \";          // 4 3 2 1\n    cout << \"\\n\";\n}"},"q1":{"s":[{"t":"Describe the queue","d":"Capacity N = 8, front f = 6 and size n = 3, so the items sit in slots 6, 7 and 0. Both functions use mod N to wrap around."},{"t":"Find the rear slot","d":"(f + n) mod N = (6 + 3) mod 8 = 9 mod 8 = 1, so the next enqueue goes to slot 1."},{"t":"Enqueue 99","d":"99 is stored in a[1] and the size becomes 4. No other item moves."},{"t":"Dequeue","d":"dequeue takes a[f] = a[6], then f = (6 + 1) mod 8 = 7 and n drops to 3. Each operation is O(1)."}],"c":"#include <iostream>\nusing namespace std;\n\n// Step 1: Describe the queue\nconst int N = 8;\nint a[N] = {2, 0, 0, 0, 0, 0, 5, 8};   // items at slots 6, 7, 0\nint f = 6, n = 3;                        // front index and size\n\nvoid enqueue(int x) {\n    if (n == N) { cout << \"full\\n\"; return; }\n    a[(f + n) % N] = x;\n    n++;\n}\nint dequeue() {\n    int x = a[f];\n    f = (f + 1) % N;\n    n--;\n    return x;\n}\n\nint main() {\n    // Step 2: Find the rear slot\n    cout << \"next enqueue slot = \" << (f + n) % N << \"\\n\";   // 1\n    // Step 3: Enqueue 99\n    enqueue(99);\n    cout << \"a[1] = \" << a[1] << \", size = \" << n << \"\\n\";\n    // Step 4: Dequeue\n    cout << \"dequeue -> \" << dequeue() << \", front f = \" << f << \"\\n\";\n}"},"t1":{"s":[{"t":"Build a full tree of height 3","d":"Every internal node has two children and all leaves sit at depth 3."},{"t":"Read the height","d":"Height counts the edges on the longest root-to-leaf path: 3."},{"t":"Count the nodes","d":"Level sizes are 1, 2, 4 and 8, so n = 15 = 2^(h+1) − 1."},{"t":"Count the leaves","d":"Leaves are the nodes at depth 3, so there are 2^3 = 8."}],"c":"#include <iostream>\n#include <algorithm>\nusing namespace std;\n\nstruct Node { int v; Node *l, *r; };\n\nNode* build(int h, int& id) {              // full tree of height h\n    Node* n = new Node{++id, nullptr, nullptr};\n    if (h > 0) { n->l = build(h - 1, id); n->r = build(h - 1, id); }\n    return n;\n}\nint count(Node* n)  { return n ? 1 + count(n->l) + count(n->r) : 0; }\nint leaves(Node* n) {\n    if (!n) return 0;\n    if (!n->l && !n->r) return 1;\n    return leaves(n->l) + leaves(n->r);\n}\nint height(Node* n) { return n ? 1 + max(height(n->l), height(n->r)) : -1; }\n\nint main() {\n    // Step 1: Build a full tree of height 3\n    int id = 0;\n    Node* root = build(3, id);\n    // Step 2: Read the height\n    cout << \"height = \" << height(root) << \"\\n\";   // 3\n    // Step 3: Count the nodes\n    cout << \"nodes  = \" << count(root)  << \"\\n\";   // 15 = 2^4 - 1\n    // Step 4: Count the leaves\n    cout << \"leaves = \" << leaves(root) << \"\\n\";   // 8  = 2^3\n}"},"t2":{"s":[{"t":"Build the tree","d":"Root 50 with left child 30 and right child 70."},{"t":"Preorder: node, left, right","d":"Visit 50, then the left subtree (30), then the right subtree (70): 50 30 70."},{"t":"Inorder: left, node, right","d":"Left subtree, root, right subtree: 30 50 70. For a search tree this is sorted order."},{"t":"Postorder: left, right, node","d":"Children before their parent: 30 70 50. Each node is visited once, so every traversal is O(n)."}],"c":"#include <iostream>\nusing namespace std;\n\nstruct Node { int v; Node *l, *r; };\n\nvoid pre(Node* n)  { if (!n) return; cout << n->v << \" \"; pre(n->l); pre(n->r); }\nvoid in(Node* n)   { if (!n) return; in(n->l); cout << n->v << \" \"; in(n->r); }\nvoid post(Node* n) { if (!n) return; post(n->l); post(n->r); cout << n->v << \" \"; }\n\nint main() {\n    // Step 1: Build the tree\n    Node* root = new Node{50, new Node{30, nullptr, nullptr},\n                              new Node{70, nullptr, nullptr}};\n    // Step 2: Preorder: node, left, right\n    cout << \"Preorder:  \"; pre(root);  cout << \"\\n\";   // 50 30 70\n    // Step 3: Inorder: left, node, right\n    cout << \"Inorder:   \"; in(root);   cout << \"\\n\";   // 30 50 70\n    // Step 4: Postorder: left, right, node\n    cout << \"Postorder: \"; post(root); cout << \"\\n\";   // 30 70 50\n}"},"t3":{"s":[{"t":"Start with an empty tree","d":"root = nullptr, so the first insert creates the root."},{"t":"Insert 40, 20, 60 and 10","d":"Smaller values go left and larger go right. 40 becomes the root, 20 its left child, 60 its right child, and 10 the left child of 20."},{"t":"Measure the height","d":"The longest path 40 → 20 → 10 has 2 edges, so the height is 2."}],"c":"#include <iostream>\n#include <algorithm>\nusing namespace std;\n\nstruct Node { int v; Node *l, *r; };\n\nNode* insert(Node* n, int x) {              // BST insert, O(h)\n    if (!n) return new Node{x, nullptr, nullptr};\n    if (x < n->v) n->l = insert(n->l, x);\n    else          n->r = insert(n->r, x);\n    return n;\n}\nint height(Node* n) { return n ? 1 + max(height(n->l), height(n->r)) : -1; }\n\nint main() {\n    // Step 1: Start with an empty tree\n    Node* root = nullptr;\n    // Step 2: Insert 40, 20, 60 and 10\n    for (int x : {40, 20, 60, 10}) root = insert(root, x);\n    // Step 3: Measure the height\n    cout << \"root = \" << root->v << \", height = \" << height(root) << \"\\n\";   // height 2\n}"}};
+const esc=s=>s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+const EXO={"a1": "Entries shifted: 2\n100 90 80 70 40 ", "a2": "1 2 4 5 \nSwaps: 5", "a3": "flat index = 7\nflat[7] = X\n. . . \n. . . \n. X . ", "l1": "4 -> 9 -> 16 -> null\n2 -> 4 -> 9 -> 16 -> null\n9 -> 16 -> null", "l2": "4 9 16 \n4 9 ", "l3": "advance 1: B\nadvance 2: C\nadvance 3: A\nadvance 4: B\nadvance 5: C\n5 mod 3 = 2, cursor at C", "l4": "prev = 1\nprev = 2\nprev = 3\n3 2 1 ", "s1": "pop: 5\npop: 8\ntop: 3, size: 1\nSTL top: 3", "s2": "first pop = 4\n4 3 2 1 ", "q1": "next enqueue slot = 1\na[1] = 99, size = 4\ndequeue -> 5, front f = 7", "t1": "height = 3\nnodes  = 15\nleaves = 8", "t2": "Preorder:  50 30 70 \nInorder:   30 50 70 \nPostorder: 30 70 50 ", "t3": "root = 40, height = 2"};
+/* ---- lightweight C++ interpreter (replaces Claude API) ---- */
+function interpretCpp(code, stdinText) {
+  let output = '';
+  const print = s => { output += String(s); };
+  const println = s => { output += String(s) + '\n'; };
+  // Remove comments
+  let src = code.replace(/\/\/.*$/gm, '').replace(/\/\*[\s\S]*?\*\//g, '');
+  // Remove preprocessor and using
+  src = src.replace(/^\s*#.*$/gm, '').replace(/^\s*using\s+namespace\s+\w+;/gm, '');
+  // Environment
+  const env = { __structs: {}, __functions: {}, __globals: {} };
+  const MAX_ITER = 100000;
+  let iterCount = 0;
+  function checkIter() { if (++iterCount > MAX_ITER) throw new Error('Execution limit reached (possible infinite loop)'); }
+
+  // Tokenizer
+  function tokenize(s) {
+    const tokens = [];
+    let i = 0;
+    while (i < s.length) {
+      if (/\s/.test(s[i])) { i++; continue; }
+      // String literal
+      if (s[i] === '"') {
+        let j = i + 1, str = '';
+        while (j < s.length && s[j] !== '"') {
+          if (s[j] === '\\') { j++; const c = s[j]; str += c === 'n' ? '\n' : c === 't' ? '\t' : c === '\\' ? '\\' : c === '"' ? '"' : c === '0' ? '\0' : c; j++; }
+          else { str += s[j]; j++; }
+        }
+        tokens.push({ type: 'string', value: str }); i = j + 1; continue;
+      }
+      // Char literal
+      if (s[i] === "'") {
+        let j = i + 1, ch = '';
+        if (s[j] === '\\') { j++; const c = s[j]; ch = c === 'n' ? '\n' : c === 't' ? '\t' : c === '\\' ? '\\' : c === '0' ? '\0' : c; j++; }
+        else { ch = s[j]; j++; }
+        tokens.push({ type: 'char', value: ch }); i = j + 1; continue;
+      }
+      // Number
+      if (/[0-9]/.test(s[i]) || (s[i] === '-' && i > 0 && /[=(<,{+\-*/%|&!^~;:]/.test(s[i-1].trim() || '=') && /[0-9]/.test(s[i+1] || ''))) {
+        let j = i; if (s[j] === '-') j++;
+        while (j < s.length && /[0-9.]/.test(s[j])) j++;
+        tokens.push({ type: 'number', value: parseFloat(s.slice(i, j)) }); i = j; continue;
+      }
+      // Operators (multi-char first)
+      const ops2 = ['<<', '>>', '<=', '>=', '==', '!=', '&&', '||', '++', '--', '->', '+=', '-=', '*=', '/=', '%='];
+      let found = false;
+      for (const op of ops2) { if (s.slice(i, i + op.length) === op) { tokens.push({ type: 'op', value: op }); i += op.length; found = true; break; } }
+      if (found) continue;
+      // Single char ops
+      if ('+-*/%=<>!&|^~(){}[];:,.?'.includes(s[i])) { tokens.push({ type: 'op', value: s[i] }); i++; continue; }
+      // Identifiers / keywords
+      if (/[a-zA-Z_]/.test(s[i])) {
+        let j = i; while (j < s.length && /[a-zA-Z0-9_]/.test(s[j])) j++;
+        tokens.push({ type: 'id', value: s.slice(i, j) }); i = j; continue;
+      }
+      i++;
+    }
+    return tokens;
+  }
+
+  // Expression evaluator (simplified recursive descent)
+  function evalExpr(tokens, pos, scope) {
+    return evalAssign(tokens, pos, scope);
+  }
+  function evalAssign(tokens, pos, scope) {
+    let [val, p] = evalTernary(tokens, pos, scope);
+    if (p < tokens.length && tokens[p].type === 'op' && ['=', '+=', '-=', '*=', '/=', '%='].includes(tokens[p].value)) {
+      const op = tokens[p].value; p++;
+      let [rval, p2] = evalAssign(tokens, p, scope);
+      const ref = resolveRef(tokens, pos, scope);
+      if (ref) {
+        if (op === '=') ref.set(rval);
+        else if (op === '+=') ref.set(ref.get() + rval);
+        else if (op === '-=') ref.set(ref.get() - rval);
+        else if (op === '*=') ref.set(ref.get() * rval);
+        else if (op === '/=') ref.set(Math.trunc(ref.get() / rval));
+        else if (op === '%=') ref.set(ref.get() % rval);
+        return [ref.get(), p2];
+      }
+      return [rval, p2];
+    }
+    return [val, p];
+  }
+  function evalTernary(tokens, pos, scope) {
+    let [val, p] = evalOr(tokens, pos, scope);
+    if (p < tokens.length && tokens[p].value === '?') {
+      p++; let [tv, p2] = evalExpr(tokens, p, scope);
+      if (p2 < tokens.length && tokens[p2].value === ':') p2++;
+      let [fv, p3] = evalExpr(tokens, p2, scope);
+      return [val ? tv : fv, p3];
+    }
+    return [val, p];
+  }
+  function evalOr(tokens, pos, scope) {
+    let [val, p] = evalAnd(tokens, pos, scope);
+    while (p < tokens.length && tokens[p].value === '||') { p++; let [r, p2] = evalAnd(tokens, p, scope); val = val || r; p = p2; }
+    return [val, p];
+  }
+  function evalAnd(tokens, pos, scope) {
+    let [val, p] = evalEq(tokens, pos, scope);
+    while (p < tokens.length && tokens[p].value === '&&') { p++; let [r, p2] = evalEq(tokens, p, scope); val = val && r; p = p2; }
+    return [val, p];
+  }
+  function evalEq(tokens, pos, scope) {
+    let [val, p] = evalRel(tokens, pos, scope);
+    while (p < tokens.length && ['==', '!='].includes(tokens[p].value)) {
+      const op = tokens[p].value; p++; let [r, p2] = evalRel(tokens, p, scope);
+      val = op === '==' ? val === r : val !== r; p = p2;
+    }
+    return [val, p];
+  }
+  function evalRel(tokens, pos, scope) {
+    let [val, p] = evalAdd(tokens, pos, scope);
+    while (p < tokens.length && ['<', '>', '<=', '>='].includes(tokens[p].value)) {
+      const op = tokens[p].value; p++; let [r, p2] = evalAdd(tokens, p, scope);
+      val = op === '<' ? val < r : op === '>' ? val > r : op === '<=' ? val <= r : val >= r; p = p2;
+    }
+    return [val, p];
+  }
+  function evalAdd(tokens, pos, scope) {
+    let [val, p] = evalMul(tokens, pos, scope);
+    while (p < tokens.length && ['+', '-'].includes(tokens[p].value) && tokens[p].type === 'op') {
+      const op = tokens[p].value; p++; let [r, p2] = evalMul(tokens, p, scope);
+      val = op === '+' ? val + r : val - r; p = p2;
+    }
+    return [val, p];
+  }
+  function evalMul(tokens, pos, scope) {
+    let [val, p] = evalUnary(tokens, pos, scope);
+    while (p < tokens.length && ['*', '/', '%'].includes(tokens[p].value)) {
+      const op = tokens[p].value; p++; let [r, p2] = evalUnary(tokens, p, scope);
+      val = op === '*' ? val * r : op === '/' ? Math.trunc(val / r) : val % r; p = p2;
+    }
+    return [val, p];
+  }
+  function evalUnary(tokens, pos, scope) {
+    if (pos >= tokens.length) return [0, pos];
+    const t = tokens[pos];
+    if (t.value === '!' ) { let [v, p] = evalUnary(tokens, pos + 1, scope); return [!v ? 1 : 0, p]; }
+    if (t.value === '-' && (pos === 0 || tokens[pos-1].type === 'op')) { let [v, p] = evalUnary(tokens, pos + 1, scope); return [-v, p]; }
+    if (t.value === '++') { const ref = resolveRef(tokens, pos + 1, scope); if (ref) { ref.set(ref.get() + 1); return [ref.get(), pos + 2]; } }
+    if (t.value === '--') { const ref = resolveRef(tokens, pos + 1, scope); if (ref) { ref.set(ref.get() - 1); return [ref.get(), pos + 2]; } }
+    if (t.value === '*' && pos + 1 < tokens.length && tokens[pos+1].type === 'id') { /* dereference pointer - treat as the pointed-to value */ return evalPostfix(tokens, pos + 1, scope); }
+    if (t.value === '&') { return evalPostfix(tokens, pos + 1, scope); /* simplified: return the value itself */ }
+    if (t.value === '(') { /* check for cast like (int) */ if (pos + 2 < tokens.length && tokens[pos+1].type === 'id' && isType(tokens[pos+1].value) && tokens[pos+2].value === ')') { let [v, p] = evalUnary(tokens, pos + 3, scope); return [Math.trunc(v), p]; } }
+    return evalPostfix(tokens, pos, scope);
+  }
+  const isType = w => ['int','char','long','short','float','double','bool','size_t','auto','void','unsigned','const','string','Node','node'].includes(w);
+  function evalPostfix(tokens, pos, scope) {
+    let [val, p] = evalPrimary(tokens, pos, scope);
+    while (p < tokens.length) {
+      if (tokens[p].value === '++') { const ref = resolveRef(tokens, pos, scope); if (ref) { const old = ref.get(); ref.set(old + 1); return [old, p + 1]; } p++; }
+      else if (tokens[p].value === '--') { const ref = resolveRef(tokens, pos, scope); if (ref) { const old = ref.get(); ref.set(old - 1); return [old, p + 1]; } p++; }
+      else if (tokens[p].value === '[') {
+        p++; let [idx, p2] = evalExpr(tokens, p, scope);
+        if (p2 < tokens.length && tokens[p2].value === ']') p2++;
+        if (Array.isArray(val)) val = val[Math.trunc(idx)];
+        else if (typeof val === 'object' && val !== null) val = val[Math.trunc(idx)];
+        p = p2;
+      }
+      else if (tokens[p].value === '->') { p++; const member = tokens[p]?.value; p++; if (val && typeof val === 'object') val = val[member]; }
+      else if (tokens[p].value === '.') {
+        p++; const member = tokens[p]?.value; p++;
+        if (typeof val === 'object' && val !== null) {
+          // Check for method calls
+          if (p < tokens.length && tokens[p].value === '(') {
+            p++; const args = []; let depth = 1;
+            const argTokens = [];
+            while (p < tokens.length && depth > 0) {
+              if (tokens[p].value === '(') depth++;
+              else if (tokens[p].value === ')') { depth--; if (depth === 0) { p++; break; } }
+              else if (tokens[p].value === ',' && depth === 1) { args.push(evalTokens(argTokens.splice(0), scope)); }
+              argTokens.push(tokens[p]); p++;
+            }
+            if (argTokens.length) args.push(evalTokens(argTokens, scope));
+            // STL methods
+            if (member === 'push' || member === 'push_back') { val.push(args[0]); val = undefined; }
+            else if (member === 'pop' || member === 'pop_back') { val.pop(); val = undefined; }
+            else if (member === 'top' || member === 'back') { val = val[val.length - 1]; }
+            else if (member === 'front') { val = val[0]; }
+            else if (member === 'size' || member === 'length') { val = val.length; }
+            else if (member === 'empty') { val = val.length === 0; }
+            else val = undefined;
+          } else {
+            val = val[member];
+          }
+        }
+      }
+      else break;
+    }
+    return [val, p];
+  }
+  function evalPrimary(tokens, pos, scope) {
+    if (pos >= tokens.length) return [0, pos];
+    const t = tokens[pos];
+    if (t.type === 'number') return [t.value, pos + 1];
+    if (t.type === 'string') return [t.value, pos + 1];
+    if (t.type === 'char') return [t.value, pos + 1];
+    if (t.value === 'true') return [true, pos + 1];
+    if (t.value === 'false') return [false, pos + 1];
+    if (t.value === 'nullptr' || t.value === 'NULL') return [null, pos + 1];
+    if (t.value === 'new') {
+      let p = pos + 1; const typeName = tokens[p]?.value; p++;
+      if (p < tokens.length && tokens[p].value === '{') {
+        p++; const fields = []; let depth = 1;
+        const argTokens = [];
+        while (p < tokens.length && depth > 0) {
+          if (tokens[p].value === '{') depth++;
+          else if (tokens[p].value === '}') { depth--; if (depth === 0) { p++; break; } }
+          else if (tokens[p].value === ',' && depth === 1) { fields.push(evalTokens(argTokens.splice(0), scope)); }
+          argTokens.push(tokens[p]); p++;
+        }
+        if (argTokens.length) fields.push(evalTokens(argTokens, scope));
+        const obj = {};
+        const sd = env.__structs[typeName];
+        if (sd) { sd.forEach((f, i) => { obj[f] = i < fields.length ? fields[i] : (typeof fields[0] === 'number' ? 0 : null); }); }
+        else { fields.forEach((f, i) => obj['f' + i] = f); }
+        return [obj, p];
+      }
+      if (p < tokens.length && tokens[p].value === '(') {
+        p++; const fields = []; let depth = 1;
+        const argTokens = [];
+        while (p < tokens.length && depth > 0) {
+          if (tokens[p].value === '(') depth++;
+          else if (tokens[p].value === ')') { depth--; if (depth === 0) { p++; break; } }
+          else if (tokens[p].value === ',' && depth === 1) { fields.push(evalTokens(argTokens.splice(0), scope)); }
+          argTokens.push(tokens[p]); p++;
+        }
+        if (argTokens.length) fields.push(evalTokens(argTokens, scope));
+        const obj = {};
+        const sd = env.__structs[typeName];
+        if (sd) { sd.forEach((f, i) => { obj[f] = i < fields.length ? fields[i] : 0; }); }
+        return [obj, p];
+      }
+      return [{ __type: typeName }, p];
+    }
+    if (t.value === '(' ) {
+      let p = pos + 1; let [val, p2] = evalExpr(tokens, p, scope);
+      if (p2 < tokens.length && tokens[p2].value === ')') p2++;
+      return [val, p2];
+    }
+    if (t.value === '{') {
+      let p = pos + 1; const arr = []; let depth = 1;
+      const argTokens = [];
+      while (p < tokens.length && depth > 0) {
+        if (tokens[p].value === '{') depth++;
+        else if (tokens[p].value === '}') { depth--; if (depth === 0) { p++; break; } }
+        else if (tokens[p].value === ',' && depth === 1) { arr.push(evalTokens(argTokens.splice(0), scope)); }
+        argTokens.push(tokens[p]); p++;
+      }
+      if (argTokens.length) arr.push(evalTokens(argTokens, scope));
+      return [arr, p];
+    }
+    if (t.type === 'id') {
+      const name = t.value;
+      // Function call
+      if (pos + 1 < tokens.length && tokens[pos + 1].value === '(') {
+        let p = pos + 2; const args = []; let depth = 1;
+        const argTokens = [];
+        while (p < tokens.length && depth > 0) {
+          if (tokens[p].value === '(') depth++;
+          else if (tokens[p].value === ')') { depth--; if (depth === 0) { p++; break; } }
+          else if (tokens[p].value === ',' && depth === 1) { args.push(evalTokens(argTokens.splice(0), scope)); }
+          argTokens.push(tokens[p]); p++;
+        }
+        if (argTokens.length) args.push(evalTokens(argTokens, scope));
+        // Built-in functions
+        if (name === 'max') return [Math.max(args[0] ?? 0, args[1] ?? 0), p];
+        if (name === 'min') return [Math.min(args[0] ?? 0, args[1] ?? 0), p];
+        if (name === 'abs') return [Math.abs(args[0] ?? 0), p];
+        if (name === 'swap') {
+          /* simplified swap - works for array elements in scope */
+          return [undefined, p];
+        }
+        if (name === 'sizeof') return [4, p];
+        // User function
+        const fn = env.__functions[name];
+        if (fn) {
+          const fnScope = Object.create(scope);
+          fn.params.forEach((param, i) => { fnScope[param.name] = i < args.length ? args[i] : 0; });
+          const result = execBlock(fn.body, fnScope);
+          return [result?.value ?? undefined, p];
+        }
+        return [undefined, p];
+      }
+      // Array access
+      if (pos + 1 < tokens.length && tokens[pos + 1].value === '[') {
+        let p = pos + 2; let [idx, p2] = evalExpr(tokens, p, scope);
+        if (p2 < tokens.length && tokens[p2].value === ']') p2++;
+        const arr = lookup(name, scope);
+        let val = Array.isArray(arr) ? arr[Math.trunc(idx)] : (typeof arr === 'string' ? arr.charAt(Math.trunc(idx)) : undefined);
+        // Multi-dim
+        while (p2 < tokens.length && tokens[p2].value === '[') {
+          p2++; let [idx2, p3] = evalExpr(tokens, p2, scope);
+          if (p3 < tokens.length && tokens[p3].value === ']') p3++;
+          if (Array.isArray(val)) val = val[Math.trunc(idx2)];
+          p2 = p3;
+        }
+        return [val, p2];
+      }
+      // Variable lookup
+      const val = lookup(name, scope);
+      return [val, pos + 1];
+    }
+    return [0, pos + 1];
+  }
+  function resolveRef(tokens, pos, scope) {
+    if (pos >= tokens.length) return null;
+    const t = tokens[pos];
+    if (t.type !== 'id') return null;
+    const name = t.value;
+    // a[i]
+    if (pos + 1 < tokens.length && tokens[pos + 1].value === '[') {
+      let p = pos + 2; let [idx, p2] = evalExpr(tokens, p, scope);
+      if (p2 < tokens.length && tokens[p2].value === ']') p2++;
+      const arr = lookup(name, scope);
+      // a[i][j]
+      if (p2 < tokens.length && tokens[p2].value === '[') {
+        p2++; let [idx2, p3] = evalExpr(tokens, p2, scope);
+        if (p3 < tokens.length && tokens[p3].value === ']') p3++;
+        return { get: () => arr[Math.trunc(idx)][Math.trunc(idx2)], set: v => { arr[Math.trunc(idx)][Math.trunc(idx2)] = v; } };
+      }
+      return { get: () => arr[Math.trunc(idx)], set: v => { arr[Math.trunc(idx)] = v; } };
+    }
+    // a->member
+    if (pos + 1 < tokens.length && tokens[pos + 1].value === '->') {
+      const obj = lookup(name, scope);
+      const member = tokens[pos + 2]?.value;
+      // a->member->member
+      if (pos + 3 < tokens.length && tokens[pos + 3]?.value === '->') {
+        const obj2 = obj?.[member];
+        const member2 = tokens[pos + 4]?.value;
+        return { get: () => obj2?.[member2], set: v => { if (obj2) obj2[member2] = v; } };
+      }
+      return { get: () => obj?.[member], set: v => { if (obj) obj[member] = v; } };
+    }
+    // a.member
+    if (pos + 1 < tokens.length && tokens[pos + 1].value === '.') {
+      const obj = lookup(name, scope);
+      const member = tokens[pos + 2]?.value;
+      return { get: () => obj?.[member], set: v => { if (obj) obj[member] = v; } };
+    }
+    // simple variable
+    return {
+      get: () => lookup(name, scope),
+      set: v => { let s = scope; while (s && !s.hasOwnProperty(name)) s = Object.getPrototypeOf(s); if (s) s[name] = v; else scope[name] = v; }
+    };
+  }
+  function lookup(name, scope) {
+    if (name in scope) return scope[name];
+    if (name in env.__globals) return env.__globals[name];
+    return undefined;
+  }
+  function evalTokens(tokens, scope) {
+    if (!tokens.length) return 0;
+    const [val] = evalExpr(tokens, 0, scope);
+    return val;
+  }
+
+  // Statement executor
+  function execStmts(stmts, scope) {
+    for (const stmt of stmts) {
+      checkIter();
+      const result = execStmt(stmt, scope);
+      if (result && (result.type === 'return' || result.type === 'break' || result.type === 'continue')) return result;
+    }
+    return null;
+  }
+
+  // Parse and execute a block of code
+  function parseBlock(code) {
+    const lines = [];
+    let i = 0, depth = 0;
+    let current = '';
+    while (i < code.length) {
+      const c = code[i];
+      if (c === '{') { depth++; current += c; i++; }
+      else if (c === '}') { depth--; current += c; if (depth <= 0) { lines.push(current.trim()); current = ''; } i++; }
+      else if (c === ';' && depth === 0) { current += c; lines.push(current.trim()); current = ''; i++; }
+      else { current += c; i++; }
+    }
+    if (current.trim()) lines.push(current.trim());
+    return lines.filter(l => l);
+  }
+
+  function extractBlock(code) {
+    const i = code.indexOf('{');
+    if (i < 0) return ['', code];
+    let depth = 0, j = i;
+    while (j < code.length) { if (code[j] === '{') depth++; else if (code[j] === '}') { depth--; if (depth === 0) break; } j++; }
+    return [code.slice(i + 1, j), code.slice(j + 1)];
+  }
+
+  function execBlock(code, scope) {
+    const stmts = parseBlock(code);
+    return execStmts(stmts, scope);
+  }
+
+  function execStmt(stmt, scope) {
+    if (!stmt || !stmt.trim()) return null;
+    stmt = stmt.trim();
+    checkIter();
+
+    // cout statement
+    if (/^(?:std\s*::\s*)?cout\s*<</.test(stmt)) {
+      stmt = stmt.replace(/;\s*$/, '');
+      const parts = stmt.replace(/^(?:std\s*::\s*)?cout\s*/, '').split(/\s*<<\s*/).filter(Boolean);
+      for (const part of parts) {
+        const trimmed = part.trim();
+        if (trimmed === 'endl' || trimmed === 'std::endl') { print('\n'); continue; }
+        if (/^"/.test(trimmed)) {
+          const tokens = tokenize(trimmed);
+          const [val] = evalExpr(tokens, 0, scope);
+          print(val);
+        } else {
+          const tokens = tokenize(trimmed);
+          const [val] = evalExpr(tokens, 0, scope);
+          print(val === undefined ? '' : val === null ? 0 : val === true ? 1 : val === false ? 0 : val);
+        }
+      }
+      return null;
+    }
+
+    // return statement
+    if (/^return\b/.test(stmt)) {
+      const expr = stmt.replace(/^return\s*/, '').replace(/;\s*$/, '').trim();
+      if (!expr) return { type: 'return', value: undefined };
+      const tokens = tokenize(expr);
+      const [val] = evalExpr(tokens, 0, scope);
+      return { type: 'return', value: val };
+    }
+
+    // break / continue
+    if (/^break\s*;?$/.test(stmt)) return { type: 'break' };
+    if (/^continue\s*;?$/.test(stmt)) return { type: 'continue' };
+
+    // delete statement (no-op in our interpreter)
+    if (/^delete\b/.test(stmt)) return null;
+
+    // for loop
+    const forMatch = /^for\s*\((.*)\)\s*\{/.exec(stmt);
+    if (forMatch || /^for\s*\(/.test(stmt)) {
+      const parenStart = stmt.indexOf('(');
+      let depth = 0, j = parenStart;
+      while (j < stmt.length) { if (stmt[j] === '(') depth++; else if (stmt[j] === ')') { depth--; if (depth === 0) break; } j++; }
+      const header = stmt.slice(parenStart + 1, j);
+      const bodyStr = stmt.slice(j + 1).trim();
+      // Range-based for: for (type x : collection)
+      const rangeMatch = /^(\w[\w\s*&]*?)\s+(\w+)\s*:\s*(.+)$/.exec(header);
+      if (rangeMatch) {
+        const varName = rangeMatch[2], collExpr = rangeMatch[3].trim();
+        const tokens = tokenize(collExpr);
+        const [coll] = evalExpr(tokens, 0, scope);
+        const [body] = extractBlock(bodyStr.startsWith('{') ? bodyStr : '{' + bodyStr + '}');
+        const forScope = Object.create(scope);
+        if (Array.isArray(coll)) {
+          for (const item of coll) {
+            checkIter(); forScope[varName] = item;
+            const r = execBlock(body, forScope);
+            if (r?.type === 'break') break;
+            if (r?.type === 'return') return r;
+          }
+        } else if (typeof coll === 'object' && coll !== null) {
+          const initList = Object.values(coll);
+          for (const item of initList) {
+            checkIter(); forScope[varName] = item;
+            const r = execBlock(body, forScope);
+            if (r?.type === 'break') break;
+            if (r?.type === 'return') return r;
+          }
+        }
+        return null;
+      }
+      // Standard for: for (init; cond; incr)
+      const parts = header.split(';');
+      if (parts.length === 3) {
+        const forScope = Object.create(scope);
+        execStmt(parts[0].trim() + ';', forScope);
+        const condTokens = tokenize(parts[1].trim());
+        const incrTokens = tokenize(parts[2].trim());
+        const [body] = extractBlock(bodyStr.startsWith('{') ? bodyStr : '{' + bodyStr + '}');
+        while (true) {
+          checkIter();
+          if (condTokens.length) { const [cond] = evalExpr(condTokens, 0, forScope); if (!cond) break; }
+          const r = execBlock(body, forScope);
+          if (r?.type === 'break') break;
+          if (r?.type === 'return') return r;
+          if (incrTokens.length) evalExpr(incrTokens, 0, forScope);
+        }
+        return null;
+      }
+    }
+
+    // while loop
+    if (/^while\s*\(/.test(stmt)) {
+      const parenStart = stmt.indexOf('(');
+      let depth = 0, j = parenStart;
+      while (j < stmt.length) { if (stmt[j] === '(') depth++; else if (stmt[j] === ')') { depth--; if (depth === 0) break; } j++; }
+      const condStr = stmt.slice(parenStart + 1, j);
+      const bodyStr = stmt.slice(j + 1).trim();
+      const condTokens = tokenize(condStr);
+      const [body] = extractBlock(bodyStr.startsWith('{') ? bodyStr : '{' + bodyStr + '}');
+      while (true) {
+        checkIter();
+        const [cond] = evalExpr(condTokens, 0, scope);
+        if (!cond) break;
+        const r = execBlock(body, scope);
+        if (r?.type === 'break') break;
+        if (r?.type === 'return') return r;
+      }
+      return null;
+    }
+
+    // if / else
+    if (/^if\s*\(/.test(stmt)) {
+      const parenStart = stmt.indexOf('(');
+      let depth = 0, j = parenStart;
+      while (j < stmt.length) { if (stmt[j] === '(') depth++; else if (stmt[j] === ')') { depth--; if (depth === 0) break; } j++; }
+      const condStr = stmt.slice(parenStart + 1, j);
+      let rest = stmt.slice(j + 1).trim();
+      const condTokens = tokenize(condStr);
+      const [cond] = evalExpr(condTokens, 0, scope);
+      // Extract if body
+      let ifBody, elseBody = '';
+      if (rest.startsWith('{')) {
+        const [body, remaining] = extractBlock(rest);
+        ifBody = body;
+        rest = remaining.trim();
+      } else {
+        const semi = rest.indexOf(';');
+        ifBody = semi >= 0 ? rest.slice(0, semi + 1) : rest;
+        rest = semi >= 0 ? rest.slice(semi + 1).trim() : '';
+      }
+      // Check for else
+      if (/^else\b/.test(rest)) {
+        rest = rest.replace(/^else\s*/, '');
+        if (rest.startsWith('{')) { [elseBody] = extractBlock(rest); }
+        else if (/^if\s*\(/.test(rest)) { elseBody = rest; }
+        else { const semi = rest.indexOf(';'); elseBody = semi >= 0 ? rest.slice(0, semi + 1) : rest; }
+      }
+      if (cond) { return execBlock(ifBody, scope); }
+      else if (elseBody) { return execBlock(elseBody, scope); }
+      return null;
+    }
+
+    // struct definition
+    const structMatch = /^struct\s+(\w+)\s*\{/.exec(stmt);
+    if (structMatch) {
+      const name = structMatch[1];
+      const [body] = extractBlock(stmt);
+      const fields = [];
+      body.split(';').forEach(f => {
+        f = f.trim(); if (!f || /\(/.test(f)) return;
+        const m = /(?:int|char|long|double|float|bool|Node|\w+)\s*[*]*\s+(\w+)/.exec(f);
+        if (m) fields.push(m[1]);
+        // Multiple fields: int a, b;
+        const parts = f.split(',');
+        if (parts.length > 1) {
+          parts.slice(1).forEach(p => { const m2 = /(\w+)/.exec(p.trim()); if (m2) fields.push(m2[1]); });
+        }
+      });
+      env.__structs[name] = [...new Set(fields)];
+      return null;
+    }
+
+    // class definition (simplified: treat like struct)
+    const classMatch = /^class\s+(\w+)\s*\{/.exec(stmt);
+    if (classMatch) {
+      const name = classMatch[1];
+      const [body] = extractBlock(stmt);
+      const fields = [], methods = {};
+      const cleanBody = body.replace(/public\s*:|private\s*:|protected\s*:/g, '');
+      cleanBody.split(';').forEach(f => {
+        f = f.trim(); if (!f) return;
+        // Methods
+        const fnM = /(?:int|void|bool|char|double|float|long|auto|\w+)\s+(?:[*&]*\s*)?(\w+)\s*\(([^)]*)\)\s*(?:const\s*)?\{/.exec(f);
+        if (fnM) {
+          const fnName = fnM[1], params = fnM[2].split(',').filter(Boolean).map(p => { const m = /(\w+)\s*$/.exec(p.trim()); return { name: m?.[1] || 'p' }; });
+          const [fnBody] = extractBlock(f);
+          methods[fnName] = { params, body: fnBody };
+          return;
+        }
+        // Fields
+        const m = /(?:int|char|long|double|float|bool)\s*[*]*\s+(\w+)(?:\s*\[.*?\])?(?:\s*=\s*([^,;]+))?/.exec(f);
+        if (m) fields.push(m[1]);
+      });
+      env.__structs[name] = fields;
+      // Create a constructor-like class
+      env.__functions['__class_' + name] = { fields, methods };
+      return null;
+    }
+
+    // Function definition
+    const fnMatch = /^(?:int|void|bool|char|double|float|long|auto|Node\s*\*|\w+[*&\s]*)\s+(?:[*&]*\s*)?(\w+)\s*\(([^)]*)\)\s*(?:const\s*)?\{/.exec(stmt);
+    if (fnMatch && !['if', 'for', 'while', 'switch', 'return', 'else', 'catch', 'do'].includes(fnMatch[1])) {
+      const name = fnMatch[1];
+      const paramStr = fnMatch[2];
+      const params = paramStr.split(',').filter(Boolean).map(p => {
+        p = p.trim();
+        const m = /(?:&\s*)?(\w+)\s*$/.exec(p);
+        return { name: m?.[1] || 'p', ref: /&/.test(p) };
+      });
+      const [body] = extractBlock(stmt);
+      env.__functions[name] = { params, body };
+      return null;
+    }
+
+    // Variable declaration
+    const declTypes = /^(const\s+)?(int|char|long|short|double|float|bool|auto|size_t|string|Node|\w+)(\s*[*&]+)?\s+/;
+    const declMatch = declTypes.exec(stmt);
+    if (declMatch && !['if', 'for', 'while', 'switch', 'return', 'else', 'new', 'delete', 'cout', 'cin'].includes(declMatch[2])) {
+      let rest = stmt.replace(declTypes, '').replace(/;\s*$/, '');
+      const isPtr = /[*]/.test(declMatch[3] || '');
+      // Array declaration: varName[size] = {init}
+      const arrMatch = /^(\w+)\s*\[(\d*)\](?:\s*\[(.*)\])?(?:\s*=\s*\{(.*)\})?/.exec(rest);
+      if (arrMatch) {
+        const varName = arrMatch[1], size = arrMatch[2] ? parseInt(arrMatch[2]) : 0;
+        if (arrMatch[4] !== undefined) {
+          const initTokens = tokenize(arrMatch[4]);
+          const vals = [];
+          let p = 0;
+          while (p < initTokens.length) {
+            const [v, p2] = evalExpr(initTokens, p, scope);
+            vals.push(v); p = p2;
+            if (p < initTokens.length && initTokens[p].value === ',') p++;
+          }
+          while (vals.length < size) vals.push(0);
+          scope[varName] = vals;
+        } else {
+          const arr = new Array(size || 10).fill(declMatch[2] === 'char' ? '\0' : 0);
+          // 2D array
+          if (arrMatch[3] !== undefined) {
+            const size2 = parseInt(arrMatch[3]) || 3;
+            scope[varName] = Array.from({length: size}, () => new Array(size2).fill(declMatch[2] === 'char' ? '.' : 0));
+          } else {
+            scope[varName] = arr;
+          }
+        }
+        return null;
+      }
+      // Multiple variable declarations: int a = 1, b = 2;
+      const vars = rest.split(/,(?![^{]*\})/);
+      for (const v of vars) {
+        const vm = /^\s*([*&]*\s*\w+)(?:\s*=\s*(.+))?\s*$/.exec(v.trim());
+        if (vm) {
+          const varName = vm[1].replace(/[*&\s]/g, '');
+          if (vm[2]) {
+            const initStr = vm[2].trim();
+            const tokens = tokenize(initStr);
+            const [val] = evalExpr(tokens, 0, scope);
+            scope[varName] = val;
+          } else {
+            scope[varName] = isPtr ? null : (declMatch[2] === 'string' ? '' : 0);
+          }
+        }
+      }
+      // STL container: vector<int> v = {1,2,3}; or stack<int> s;
+      const stlMatch = /^(vector|stack|queue)\s*<.*>\s+(\w+)/.exec(stmt);
+      if (stlMatch) {
+        const varName = stlMatch[2];
+        const initMatch = /=\s*\{(.*)\}/.exec(stmt);
+        if (initMatch) {
+          const tokens = tokenize(initMatch[1]);
+          const vals = [];
+          let p = 0;
+          while (p < tokens.length) {
+            const [v, p2] = evalExpr(tokens, p, scope);
+            vals.push(v); p = p2;
+            if (p < tokens.length && tokens[p].value === ',') p++;
+          }
+          scope[varName] = vals;
+        } else {
+          scope[varName] = [];
+        }
+        return null;
+      }
+      return null;
+    }
+
+    // Block: { ... }
+    if (stmt.startsWith('{')) {
+      const [body] = extractBlock(stmt);
+      return execBlock(body, Object.create(scope));
+    }
+
+    // Expression statement (assignment, function call, etc.)
+    stmt = stmt.replace(/;\s*$/, '');
+    if (!stmt) return null;
+    // Handle multiple statements separated by commas (like a[0] = 1, a[1] = 2)
+    // or semicolons that we haven't split
+    const tokens = tokenize(stmt);
+    if (tokens.length) evalExpr(tokens, 0, scope);
+    return null;
+  }
+
+  // Main execution
+  try {
+    // Parse top-level: extract structs, functions, globals, then run main()
+    const topStmts = parseBlock(src);
+    const globalScope = env.__globals;
+
+    // First pass: define structs, functions, globals
+    for (const stmt of topStmts) {
+      if (/^struct\b|^class\b/.test(stmt)) {
+        execStmt(stmt, globalScope);
+      } else if (/^(?:int|void|bool|char|double|float|long|auto|Node\s*\*|const\s+int|\w+[*&\s]*)\s+(?:[*&]*\s*)?\w+\s*\([^)]*\)\s*(?:const\s*)?\{/.test(stmt) && !/^(?:if|for|while)\b/.test(stmt)) {
+        execStmt(stmt, globalScope);
+      } else if (/^(?:const\s+)?(?:int|char|long|double|float|bool|string)\b/.test(stmt) && !/\(/.test(stmt.split('=')[0])) {
+        execStmt(stmt, globalScope);
+      }
+    }
+
+    // Run main()
+    const mainFn = env.__functions['main'];
+    if (mainFn) {
+      const mainScope = Object.create(globalScope);
+      execBlock(mainFn.body, mainScope);
+    } else {
+      return { ok: false, output: 'Error: no main() function found.' };
+    }
+    return { ok: true, output: output };
+  } catch (e) {
+    return { ok: false, output: output + (output ? '\n' : '') + 'Error: ' + e.message };
+  }
+}
+const exBlock=id=>{const e=EXP[id];if(!e)return'';return`<div class="pb"><h3 class="sh">Solve the example, step by step</h3><p>${T.ex}</p></div><div><div class="sn"><button id="sprev">‹ Previous</button><button class="pri" id="snext">Next step ›</button><span id="scount"></span></div><div class="smode" id="smode"></div><ol class="sl" id="slist"></ol></div><div class="ed" id="ed"><div class="edh"><span>example.cpp</span><span class="edb"><button data-a="clear">Clear</button><button data-a="reset">Reset code</button><button data-a="copy">Copy</button></span></div><div class="edr"><button data-a="run">▶ Run</button></div><div class="edw"><pre class="gut" id="gut" aria-hidden="true"></pre><div class="cw" id="cw"><div class="hb" id="hb"></div><pre class="hl2" id="hlp" aria-hidden="true"></pre><textarea class="cpp" id="cpp" spellcheck="false" wrap="off" aria-label="C++ code editor"></textarea></div></div><details class="sin"><summary>Program input (stdin)</summary><textarea id="stdin" rows="2" spellcheck="false" aria-label="Program input"></textarea></details><div class="ol" id="ol">OUTPUT</div><pre class="outp" id="outp" aria-live="polite">Press Run to compile and execute this program.</pre></div>`};
+const KW=/^(int|char|void|bool|long|double|float|const|struct|class|public|private|return|if|else|for|while|new|delete|using|namespace|nullptr|auto|static|size_t|true|false|include)$/,LH=20.25,PAD=12;
+function hiliteCpp(src){const re=/(\/\/[^\n]*)|("(?:\\.|[^"\\\n])*")|('(?:\\.|[^'\\\n])')|(#\s*include\s*<[^>\n]*>)|(\b\d+\b)|(\b[A-Za-z_]\w*\b)/g,e=s=>s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');let o='',last=0,m;
+ while(m=re.exec(src)){o+=e(src.slice(last,m.index));const t=m[0],c=m[1]?'tc':(m[2]||m[3])?'':m[4]?'tk':m[5]?'tn':KW.test(t)?'tk':'';o+=c?`<span class="${c}">${e(t)}</span>`:e(t);last=re.lastIndex}
+ return o+e(src.slice(last))+'\n'}
+function stepRanges(code){const L=code.split('\n'),st=[];L.forEach((l,i)=>{const m=/^\s*\/\/\s*Step\s+(\d+)\b/.exec(l);if(m)st.push([+m[1],i+1])});const R={};
+ st.forEach(([k,s],j)=>{let e=j+1<st.length?st[j+1][1]-1:L.length;while(e>s&&!L[e-1].trim())e--;if(j==st.length-1&&e>s&&/^\}\s*$/.test(L[e-1]))e--;R[k]=[s,e]});return R}
+/* ---- automatic step generator for any pasted C++ ---- */
+const TYP='(?:const\\s+|static\\s+|unsigned\\s+)*(?:int|long|short|char|bool|float|double|auto|size_t|string|vector\\s*<[^>]*>|stack\\s*<[^>]*>|queue\\s*<[^>]*>|map\\s*<[^>]*>|[A-Z]\\w*)',RDECL=new RegExp('^\\s*'+TYP+'(?:\\s+|\\s*[*&]+\\s*)\\w+\\s*(=|\\[|;|\\(|\\{|,)');
+const VERB={push:'pushes a value onto the stack',pop:'removes the top item',peek:'reads the top item',top:'reads the top item',enqueue:'adds an item at the rear of the queue',dequeue:'removes the item at the front',front:'reads the front item',insert:'inserts a value',insertfront:'inserts a node at the front of the list',removefront:'removes the front node',insertback:'inserts at the back',remove:'removes an item',print:'prints the structure',swap:'swaps two values',sort:'sorts the data',reverse:'reverses the order',search:'searches for a value',find:'searches for a value',pre:'visits nodes in preorder',post:'visits nodes in postorder',height:'computes the height'};
+const one=s=>s.replace(/\s+/g,' ').trim();
+const condOf=(t,kw)=>{const k=t.search(new RegExp('\\b'+kw+'\\b')),i=t.indexOf('(',k);if(i<0)return'';let p=0,j=i;for(;j<t.length;j++){if(t[j]=='(')p++;else if(t[j]==')'){p--;if(!p)break}}return one(t.slice(i+1,j))};
+const hintsOf=t=>{const h=[];if(/\bswap\s*\(/.test(t))h.push('swaps values');if(/\bcout\b|\bprintf\b/.test(t))h.push('prints output');if(/->\s*(next|left|right)/.test(t))h.push('follows pointers');if(/\+\+|\+=|--|-=/.test(t))h.push('updates a counter or running value');if(/\b(push|pop|enqueue|dequeue)/.test(t))h.push('adds or removes items');
+ return(h.length?` Inside, it ${h.slice(0,3).join(' and ')}.`:'')+((t.match(/\b(for|while)\b/g)||[]).length>1?' It contains a nested loop, so the work is multiplied.':'')};
+function classify(t){if(/^\s*for\b/.test(t))return'for';if(/^\s*while\b/.test(t))return'while';if(/^\s*do\b/.test(t))return'while';if(/^\s*if\b/.test(t))return'if';if(/^\s*switch\b/.test(t))return'switch';if(/^\s*return\b/.test(t))return'ret';
+ if(/\bcout\s*<</.test(t)||/\bprintf\s*\(/.test(t))return'out';if(/\bcin\s*>>/.test(t)||/\bscanf\s*\(/.test(t))return'in';if(/^\s*delete\b/.test(t))return'free';
+ if(/\[[^\]]*\]\s*\([^)]*\)\s*\{/.test(t)&&/=/.test(t))return'lambda';if(RDECL.test(t))return'decl';
+ if(/^\s*(\+\+|--)\s*[\w\[\]\.\->]+\s*;?\s*$/.test(t)||/^\s*[\w\[\]\.\->*()]+\s*(\+\+|--)\s*;?\s*$/.test(t)||/^\s*[\w\[\]\.\->*()]+\s*[+\-*/%]?=[^=]/.test(t))return'assign';
+ if(/^\s*[\w:.>\-]+\s*\(/.test(t))return'call';return'stmt'}
+function stmtItem(t,o,reg,fns){const k=classify(t),T=one(t),O=one(o);let ti,d;
+ if(k=='for'){const h=condOf(t,'for'),p=h.split(';');
+  if(p.length==3){const v=(/(\w+)\s*=/.exec(p[0])||[])[1]||'a counter';ti=`Loop with ${v}`;d=`Starts with ${one(p[0])}, keeps going while ${one(p[1])}, and after each pass runs ${one(p[2])}.`}
+  else if(/[^:]:[^:]/.test(h)){const q=h.split(/:(?!:)/);ti=`Loop over ${one(q[1]||'a collection')}`;d=`Visits every element of ${one(q[1]||'the collection')} one at a time as ${one(q[0])}.`}else{ti='For loop';d='Repeats the block below.'}
+  d+=hintsOf(t)}
+ else if(k=='while'){ti='While loop';d=`Repeats while ${condOf(t,'while')||'the condition'} stays true.`+hintsOf(t)}
+ else if(k=='if'){ti='Check a condition';d=`Tests ${condOf(t,'if')}. The block runs only when that is true`+(/\belse\b/.test(t)?', otherwise the else branch runs.':'.')}
+ else if(k=='switch'){ti='Choose a branch';d=`Picks a branch based on ${condOf(t,'switch')}.`}
+ else if(k=='out'){ti='Print output';if(/printf/.test(o))d='Prints formatted output.';else{const ps=o.replace(/^\s*(?:std::)?cout\s*<<\s*/,'').replace(/\s*;\s*$/,'').split(/\s*<<\s*/).map(p=>{const m=/^"(.*)"$/.exec(p.trim());return m?(m[1].replace(/\\n/g,'').trim()?`"${m[1].replace(/\\n/g,'')}"`:'a new line'):/^(std::)?endl$/.test(p.trim())?'a new line':`the value of ${one(p)}`});d='Prints '+ps.join(', ')+'.'}}
+ else if(k=='in'){ti='Read input';d=`Reads ${[...T.matchAll(/>>\s*([\w\[\]\.]+)/g)].map(m=>m[1]).join(', ')||'values'} from the program input.`}
+ else if(k=='ret'){ti='Return a value';d=`Returns ${one(O.replace(/^return\s*/,'').replace(/;$/,''))||'nothing'} to the caller.`}
+ else if(k=='free'){ti='Free memory';d=`Releases memory with ${O}`}
+ else if(k=='lambda'){ti='Define a helper function';const m=/(\w+)\s*=/.exec(T);d=`Defines ${m?m[1]:'a lambda'} so it can be called later.`}
+ else if(k=='decl'){ti=reg=='g'?'Declare global data':'Declare variables';const T2=T.replace(/\{[^{}]*\}/g,m=>m.replace(/,/g,'\u0001')),ps=[...T2.matchAll(/(\w+)\s*(?:\[[^\]]*\])?\s*=\s*([^,;]+?)\s*(?=,|;|$)/g)].map(m=>`${m[1]} = ${m[2].replace(/\u0001/g,',')}`);
+  if(ps.length)d=`Creates ${ps.slice(0,5).join(', ')}${ps.length>5?', and more':''}.`;else{const m=/([*&]*\s*\w+)\s*(?:\[[^\]]*\])?\s*[;({]/.exec(T.replace(/^\s*(?:const\s+|static\s+)*\w+(?:\s*<[^>]*>)?/,''));d=`Declares ${m?one(m[1]):'a variable'}.`}}
+ else if(k=='assign'){ti='Update values';const inc=/^\s*(?:(\+\+|--)\s*)?([\w\[\]\.\->*()]+?)\s*(?:(\+\+|--))?\s*;?\s*$/.exec(T);
+  if(inc&&(inc[1]||inc[3]))d=`${(inc[1]||inc[3])=='++'?'Increases':'Decreases'} ${inc[2]} by 1.`;else{const m=/^\s*(.+?)\s*([+\-*/%]?)=\s*(.+?)\s*;?$/.exec(T);d=m?(m[2]==''?`Sets ${m[1]} to ${m[3]}.`:`Updates ${m[1]} with ${m[2]}= ${m[3]}.`):`Runs ${T}.`}}
+ else if(k=='call'&&(T.match(/;/g)||[]).length>1){ti='Call functions';d=`Calls ${T.split(';').map(one).filter(Boolean).join(', ')}.`}
+ else if(k=='call'){const m=/([\w:.>\-]+?)\s*\((.*)\)\s*;?\s*$/.exec(T),nm=m?m[1]:T,sh2=nm.split(/[.>:]/).pop(),vb=VERB[sh2.toLowerCase()];ti=`Call ${sh2}()`;d=`Calls ${nm}(${m?m[2]:''}).`+(vb?` It ${vb}.`:fns.has(sh2)?' This function is defined in your program.':'')}
+ else{ti='Run a statement';d=`Runs ${O}`}
+ return{k,t:ti,d,reg}}
+function autoSteps(code){const L=code.split('\n'),n=L.length,cl=L.map(l=>l.replace(/\/\/.*$/,'').replace(/"(?:\\.|[^"\\])*"/g,'""').replace(/'(?:\\.|[^'\\])'/g,"''"));if(!cl.some(l=>l.trim()))return[];
+ const endOf=i=>{let d=0,seen=false;for(let j=i;j<n;j++){for(const c of cl[j]){if(c=='{'){d++;seen=true}else if(c=='}')d--}if(seen&&d<=0)return j;if(!seen&&/;\s*$/.test(cl[j]))return j}return n-1};
+ const hdr=/^\s*(?:template\s*<[^>]*>\s*)?([\w:<>,*&\s]+?)\s*[*&]*\s*\b(\w+)\s*\(([^)]*)\)\s*(?:const\s*)?(?:\{.*)?$/,NOT=/^(if|for|while|switch|return|else|catch|do|delete|new|cout|cin)$/;
+ const fns=new Set();cl.forEach(l=>{const m=hdr.exec(l);if(m&&!NOT.test(m[2])&&!/^\s/.test(l.slice(0,1)))fns.add(m[2])});
+ function walk(a,b,top){const out=[];let j=a,gap=false;
+  while(j<=b){if(!cl[j].trim()){gap=true;j++;continue}if(top&&/^\s*(#|using\b)/.test(cl[j])){j++;continue}
+   let e=Math.min(endOf(j),b);for(;;){let k=e+1;while(k<=b&&!cl[k].trim())k++;if(k<=b&&/^\s*else\b/.test(cl[k]))e=Math.min(endOf(k),b);else break}
+   const t=cl.slice(j,e+1).join('\n'),o=L.slice(j,e+1).join('\n');let it=null,m;
+   if(top&&(m=/^\s*(struct|class)\s+(\w+)/.exec(cl[j]))){const inn=e===j?(cl[j].replace(/^[^{]*\{/,'').replace(/\}[^}]*$/,'').match(/[^;]+;/g)||[]):cl.slice(j+1,e),fl=inn.filter(l=>/;/.test(l)&&!/\(/.test(l)).map(l=>one(l).replace(/;/g,'')),me=inn.filter(l=>/\w\s*\(/.test(l)).map(l=>(/(\w+)\s*\(/.exec(l)||[])[1]).filter(Boolean);
+    it={k:'type',t:`Define ${m[1]} ${m[2]}`,d:`A user-defined type.`+(fl.length?` It holds ${fl.slice(0,5).join(', ')}.`:'')+(me.length?` Its operations: ${me.slice(0,6).join(', ')}.`:''),reg:'t'}}
+   else if(top&&(m=hdr.exec(cl[j]))&&!NOT.test(m[2])){if(m[2]==='main'){walk(j+1,e-1,false).forEach(x=>out.push(x));j=e+1;gap=false;continue}
+    const body=cl.slice(j+1,e+1).join('\n'),lp=(body.match(/\b(for|while)\b/g)||[]).length,rec=new RegExp('\\b'+m[2]+'\\s*\\(').test(body);
+    it={k:'fn',t:`Define ${m[2]}()`,d:`Takes ${one(m[3])||'no parameters'} and returns ${one(m[1])||'a value'}.`+(rec?' It calls itself (recursion).':'')+(lp?` It contains ${lp} loop${lp>1?'s':''}.`:''),reg:'f'}}
+   else it=stmtItem(t,o,top?'g':'m',fns);
+   it.s=j+1;it.e=e+1;it.gap=gap;gap=false;out.push(it);j=e+1}
+  return out}
+ const items=walk(0,n-1,true),SIMP=new Set(['decl','assign','call','out','in','ret','free','stmt','lambda']);
+ const group=ig=>{const g=[];items.forEach(it=>{const l=g[g.length-1];if(l&&SIMP.has(l[0].k)&&SIMP.has(it.k)&&l[0].reg===it.reg&&(ig||!it.gap))l.push(it);else g.push([it])});return g};
+ let g=group(false);if(g.length>9)g=group(true);
+ return g.map(p=>{if(p.length==1)return{t:p[0].t,d:p[0].d,s:p[0].s,e:p[0].e};const ks=new Set(p.map(x=>x.k)),k0=p[0].k;
+  const ti=ks.size==1?({decl:p[0].t,assign:'Update values',call:'Call functions',out:'Print output',in:'Read input'}[k0]||'Run statements'):'Run statements',extra=p.length-3;
+  return{t:ti,d:p.slice(0,3).map(x=>x.d).join(' ')+(extra>0?` …and ${extra} more statement${extra>1?'s':''}.`:''),s:Math.min(...p.map(x=>x.s)),e:Math.max(...p.map(x=>x.e))}})}
+
+function wireEd(id){const e=EXP[id],ta=$('#cpp');if(!e||!ta)return;const gut=$('#gut'),hlp=$('#hlp'),hb=$('#hb'),cw=$('#cw'),out=$('#outp'),ol=$('#ol'),list=$('#slist'),sm=$('#smode');let cur=0,busy=0,steps=[],mode='built-in',cset=null;
+ const builtin=()=>{const R=stepRanges(e.c);return e.s.map((x,i)=>({t:x.t,d:x.d,s:R[i+1]?R[i+1][0]:0,e:R[i+1]?R[i+1][1]:0}))};
+ const rebuild=()=>{const code=ta.value;if(code===e.c){steps=builtin();mode='built-in'}else{steps=autoSteps(code);mode='auto'}
+  list.innerHTML=steps.length?steps.map((x,i)=>`<li tabindex="0" data-i="${i}"><span class="num">${i+1}</span><div><b>${esc(x.t)}</b><p>${esc(x.d)}</p></div></li>`).join(''):'<li class="none"><div><p>Paste or type some C++ in the editor and its steps will appear here.</p></div></li>';
+  sm.textContent=mode==='built-in'?'Built-in example, explained step by step.':'Steps generated automatically from your code.';
+  if(cur>=steps.length)cur=Math.max(0,steps.length-1)};
+ const sync=()=>{hlp.scrollTop=ta.scrollTop;hlp.scrollLeft=ta.scrollLeft;gut.scrollTop=ta.scrollTop;if(hb.firstChild)hb.firstChild.style.transform=`translateY(${-ta.scrollTop}px)`};
+ const paint=()=>{const code=ta.value,n=code.split('\n').length,st=steps[cur],R=st&&st.s?[st.s,st.e]:null,h=Math.min(380,n*LH+2*PAD)+'px';hlp.innerHTML=hiliteCpp(code);
+  gut.innerHTML=Array.from({length:n},(_,i)=>R&&i+1>=R[0]&&i+1<=R[1]?`<span class="on">${i+1}</span>`:i+1).join('\n');
+  hb.innerHTML=R?`<i style="top:${PAD+(R[0]-1)*LH}px;height:${(R[1]-R[0]+1)*LH}px"></i>`:'';cw.style.height=h;gut.style.height=h;sync()};
+ const ui=sc=>{document.querySelectorAll('#slist li[data-i]').forEach((li,k)=>li.classList.toggle('on',k===cur));$('#scount').textContent=steps.length?`Step ${cur+1} of ${steps.length}`:'No steps yet';$('#sprev').disabled=cur<=0;$('#snext').disabled=cur>=steps.length-1;paint();
+  if(sc&&steps[cur]){ta.scrollTop=Math.max(0,(steps[cur].s-3)*LH);sync()}};
+ const show=(i,sc)=>{cur=Math.max(0,Math.min(steps.length-1,i));ui(sc)};
+ async function run() {
+    if (busy) return;
+    const code = ta.value.replace(/\r/g, ''), sin = $('#stdin').value;
+    if (code === e.c) {
+      ol.textContent = 'OUTPUT · precomputed program output';
+      out.textContent = EXO[id];
+      return;
+    }
+    if (!code.trim()) {
+      ol.textContent = 'OUTPUT';
+      out.textContent = 'The editor is empty. Paste some C++ or press Reset code.';
+      return;
+    }
+    busy = 1;
+    ol.textContent = 'OUTPUT · in-browser C++ interpreter';
+    out.textContent = 'Compiling and running…';
+    setTimeout(() => {
+      try {
+        const res = interpretCpp(code, sin);
+        if (res.ok) {
+          out.textContent = res.output !== '' ? res.output : '(program finished with no output)';
+        } else {
+          out.textContent = res.output;
+        }
+      } catch (err) {
+        out.textContent = 'Runtime error: ' + (err && err.message ? err.message : String(err));
+      } finally {
+        busy = 0;
+      }
+    }, 30);
+  }
+ ta.value=e.c;rebuild();ui(false);
+ ta.addEventListener('input',ev=>{rebuild();if(ev&&ev.inputType==='insertFromPaste')cur=0;else{const ln=ta.value.slice(0,ta.selectionStart).split('\n').length,k=steps.findIndex(x=>ln>=x.s&&ln<=x.e);if(k>=0)cur=k}ui(false);cxDraw()});
+ ta.addEventListener('scroll',sync);
+ ta.addEventListener('keydown',ev=>{if(ev.key==='Tab'){ev.preventDefault();ta.setRangeText('    ',ta.selectionStart,ta.selectionEnd,'end');ta.dispatchEvent(new Event('input'))}else if((ev.ctrlKey||ev.metaKey)&&ev.key==='Enter'){ev.preventDefault();run()}});
+ $('#sprev').onclick=()=>show(cur-1,1);$('#snext').onclick=()=>show(cur+1,1);
+ list.onclick=ev=>{const li=ev.target.closest('li[data-i]');if(li)show(+li.dataset.i,1)};
+ list.onkeydown=ev=>{const li=ev.target.closest('li[data-i]');if(li&&(ev.key==='Enter'||ev.key===' ')){ev.preventDefault();show(+li.dataset.i,1)}};
+ $('#ed').onclick=ev=>{const b=ev.target.closest('button');if(!b||!b.dataset.a)return;const a=b.dataset.a;
+  if(a==='run')run();
+  else if(a==='clear'){ta.value='';cset=null;cur=0;ta.dispatchEvent(new Event('input'));ol.textContent='OUTPUT';out.textContent='Editor cleared. Paste or write your own C++, then press Run.';ta.focus()}
+  else if(a==='reset'){ta.value=e.c;cset=null;cur=0;ta.dispatchEvent(new Event('input'));ol.textContent='OUTPUT';out.textContent='Code reset. Press Run.'}
+  else{const done=()=>{b.textContent='Copied';setTimeout(()=>b.textContent='Copy',1200)};try{navigator.clipboard.writeText(ta.value).then(done,()=>{ta.select();document.execCommand('copy');done()})}catch(_){ta.select();document.execCommand('copy');done()}}}}
+const FN={'1':n=>1,logn:n=>Math.log2(Math.max(n,1)),n:n=>n,nlogn:n=>n*Math.log2(Math.max(n,1)),n2:n=>n*n,n3:n=>n*n*n},NM={'1':'O(1)',logn:'O(log n)',n:'O(n)',nlogn:'O(n log n)',n2:'O(n²)',n3:'O(n³)'},ORD=['1','logn','n','nlogn','n2','n3'];
+let gn=5,lastN=-1;
+const cls=s=>{const o=new Set(),r=/O\(([^)]*)\)/g;let m;while(m=r.exec(s)){const k={'1':'1',n:'n',logn:'logn',nlogn:'nlogn',n2:'n2',h:'logn',depth:'logn'}[m[1].toLowerCase().replace(/\s/g,'').replace('²','2')];if(k)o.add(k)}return[...o]};
+function analyze(code){const src=code.replace(/\/\/.*$/gm,'').replace(/\/\*[\s\S]*?\*\//g,'').replace(/"(?:\\.|[^"\\])*"/g,'""').replace(/'(?:\\.|[^'\\])'/g,"''"),N=src.length;let i=0,max=0;
+ const ws=()=>{while(i<N&&/\s/.test(src[i]))i++},par=()=>{let p=0;do{if(src[i]=='(')p++;else if(src[i]==')')p--;i++}while(p>0&&i<N)};
+ const kw=()=>/^(for|while)(?![\w])/.exec(src.slice(i,i+6));
+ function block(d){while(i<N){ws();if(src[i]=='}'){i++;return}const p=i;stmt(d);if(i===p)i++}}
+ function stmt(d){ws();if(i>=N)return;const m=kw();
+  if(m){i+=m[1].length;ws();if(src[i]=='(')par();max=Math.max(max,d+1);stmt(d+1);return}
+  if(src[i]=='}')return;if(src[i]=='{'){i++;block(d);return}
+  const s0=i;while(i<N){const c=src[i];if(c==';'){i++;return}if(c=='{'){i++;block(d);ws();if(src[i]==';')i++;return}if(c=='}')return;if(c=='('){par();continue}
+   if(i>s0&&!/\w/.test(src[i-1])&&kw())return;i++}}
+ while(i<N){const p=i;stmt(0);if(i===p)i++}
+ let rec=false;const fr=/\b([A-Za-z_]\w*)\s*\([^;(){}]*\)\s*(?:const\s*)?\{/g;let f;
+ while(f=fr.exec(src)){if(/^(if|for|while|switch|catch|main)$/.test(f[1]))continue;let j=fr.lastIndex,dp=1;while(j<N&&dp){if(src[j]=='{')dp++;else if(src[j]=='}')dp--;j++}if(new RegExp('\\b'+f[1]+'\\s*\\(').test(src.slice(fr.lastIndex,j)))rec=true}
+ const half=/\/=\s*2|>>=\s*1|\*=\s*2|\bmid\b/.test(src),t=max>=3?'n3':max==2?'n2':max==1?(half?'logn':'n'):rec?'n':'1';
+ const arr=/\b(?:int|char|long|double|float|bool)\s+\w+\s*\[[^\]]*\]/.test(src),heap=/\bnew\s|vector\s*<|stack\s*<|queue\s*<|map\s*<|\bstring\b/.test(src),s=rec||arr||heap?'n':'1';
+ const why=[max?`${max} nested loop level${max>1?'s':''}${half&&max==1?' (halving)':''}`:'no loops',rec?'recursion':'',arr?'array storage':'',heap?'dynamic nodes or containers':''].filter(Boolean).join(', ');
+ let n=null,m1=/\b[nN]\s*=\s*(\d{1,3})\b/.exec(src);if(m1)n=+m1[1];else{const m2=/=\s*\{([^{}]*\d[^{}]*)\}/.exec(src);if(m2)n=m2[1].split(',').length}
+ return{t,s,why,n:n&&Math.min(64,Math.max(1,n))}}
+function chart(id,ref,hi,code,gx,nc,xm){const W=430,H=250,l=50,r=14,t=12,b=36,pw=W-l-r,ph=H-t-b,ym=Math.max(1,...hi.concat(code?[code]:[]).map(k=>FN[k](xm)))*1.05,X=v=>l+v/xm*pw,Y=v=>t+ph-Math.min(v,ym)/ym*ph;
+ const P=k=>{let d='';for(let i=0;i<=48;i++){const x=xm*i/48;d+=(i?'L':'M')+X(x).toFixed(1)+' '+Y(FN[k](x)).toFixed(1)}return d};
+ let s=`<defs><clipPath id="c${id}"><rect x="${l}" y="${t}" width="${pw}" height="${ph}"/></clipPath></defs>`+LN(l,t+ph,l+pw,t+ph)+LN(l,t,l,t+ph);
+ [0,.5,1].forEach(f=>{s+=L(X(xm*f),t+ph+16,Math.round(xm*f))+L(l-6,Y(ym*f)+4,Math.round(ym*f),'te')});
+ s+=L(l+pw/2,H-4,'n (input size)')+`<g clip-path="url(#c${id})">`+ref.map(k=>`<path class="cv f" d="${P(k)}"/>`).join('')+hi.map(k=>`<path class="cv" d="${P(k)}"/>`).join('')+(code?`<path class="cv c" d="${P(code)}"/>`:'')+`</g><line x1="${X(gx)}" y1="${t}" x2="${X(gx)}" y2="${t+ph}" stroke="var(--ink2)" stroke-dasharray="4 4"/>`;
+ hi.forEach((k,i)=>{s+=`<circle cx="${X(gx)}" cy="${Y(FN[k](gx))}" r="4.5" fill="var(--ink)"/>`+L(l+10,t+16+i*15,'— '+NM[k],'tl')});
+ if(code){const cx=nc||gx;s+=`<circle cx="${X(cx)}" cy="${Y(FN[code](cx))}" r="6" fill="var(--acc)" stroke="var(--bg)" stroke-width="2"/>`+L(l+10,t+16+hi.length*15,'● your code: '+NM[code],'tl ac')}
+ return`<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="Complexity chart">${s+L(l+pw-6,t+ph-8,'grey = other classes','te')}</svg>`}
+const curN=()=>Math.max(1,{array:()=>A.length,grid:()=>Gd.filter(Boolean).length,list:()=>Ls.length,stack:()=>St.length,queue:()=>Q.n,tree:()=>cnt(Tr)}[T.lab]());
+function cxDraw(){const n=curN(),sl=$('#cxs');if(n!==lastN){lastN=n;gn=Math.min(64,n);sl.value=gn}
+ const ta=$('#cpp'),an=ta?analyze(ta.value):null,hT=ORD.filter(k=>cls(T.t).includes(k)),hS=['1','logn','n'].filter(k=>cls(T.sp).includes(k)),nc=an&&an.n,xm=Math.min(80,Math.max(10,Math.ceil(Math.max(gn,nc||0)*1.25))),v=(k,x)=>Math.round(FN[k](x)*10)/10,list=(a,x)=>a.map(k=>`${NM[k]} = ${v(k,x)}`).join(' · ');
+ $('#cxn').textContent=gn;$('#cxT').innerHTML=chart('T',ORD,hT,an&&an.t,gn,nc,xm);$('#cxS').innerHTML=chart('S',['1','logn','n'],hS,an&&an.s,gn,nc,xm);
+ $('#cxr').innerHTML=`<b>This topic at n = ${gn}</b><br>Time: ${list(hT,gn)}<br>Space: ${list(hS,gn)}`+(an?`<br><b>Your code</b> (estimated live from the editor${nc?`, with n = ${nc} read from the code`:''}): time ${NM[an.t]} = ${v(an.t,nc||gn)}, space ${NM[an.s]} = ${v(an.s,nc||gn)}. Found: ${an.why}.`:'')}
+$('#cxs').oninput=()=>{gn=+$('#cxs').value;cxDraw()};
+const STAT={array:()=>`n = ${A.length} of capacity 10`,grid:()=>`Next turn: ${turn}`,list:()=>`length = ${Ls.length} · head = ${Ls[0]??'null'} · tail = ${Ls[Ls.length-1]??'null'}`,stack:()=>`size = ${St.length} · t = ${St.length-1}`+(Ou.length?` · output = [${Ou.join(', ')}]`:''),queue:()=>`n = ${Q.n} · f = ${Q.f} · next rear slot = ${(Q.f+Q.n)%8}`,tree:()=>Tr?`n = ${cnt(Tr)} · h = ${ht(Tr)} · leaves = ${lv(Tr)} · bound: ${ht(Tr)+1} ≤ n ≤ ${2**(ht(Tr)+1)-1}`:'empty tree'};
+function draw(){$('#stage').innerHTML={array:dArr,grid:dGrid,list:dList,stack:dStack,queue:dQ,tree:dTree}[T.lab]();$('#msg').textContent=msg;$('#stat').textContent=STAT[T.lab]();cxDraw()}
+function load(id){clearTimeout(timer);lastN=-1;T=TOPICS.find(x=>x.id===id);init();msg='Type a value, then choose an operation.';
+ document.querySelectorAll('nav button').forEach(b=>b.setAttribute('aria-pressed',b.dataset.id===id));
+ $('#title').textContent=T.n;$('#v').placeholder=T.ph[0];$('#i').placeholder=T.ph[1];$('#i').style.display=T.ph[1]?'':'none';$('#v').value=T.lab=='stack'&&T.id=='s2'?'1,2,3,4':'';$('#i').value='';$('#v').style.width=T.id=='s2'?'180px':'';
+ $('#ops').innerHTML=OPS[T.lab].map((o,k)=>`<button data-k="${k}" ${k==0?'class="pri"':''}>${o[0]}</button>`).join('');
+ $('#info').innerHTML=`<div class="w"><h4>Concept diagram</h4><div class="cd">${concept(T.id)}</div></div><div><h4>Definition</h4><p>${T.d}</p></div><div><h4>Formula</h4><p><code>${T.f}</code></p></div><div><h4>Time complexity</h4><p>${T.t}</p></div><div><h4>Space complexity</h4><p>${T.sp}</p></div><div class="w"><h4>Example problem</h4><p>${T.ex}</p><details><summary>Show answer</summary><p>${T.ans}</p></details></div>`;$('#ex2').innerHTML=exBlock(T.id);wireEd(T.id);draw()}
+$('#ops').onclick=e=>{const b=e.target.closest('button');if(!b)return;clearTimeout(timer);OPS[T.lab][b.dataset.k][1]();draw()};
+$('#reset').onclick=()=>{clearTimeout(timer);init();msg='Reset.';draw()};
+['v','i'].forEach(id=>$('#'+id).addEventListener('keydown',e=>{if(e.key==='Enter')$('#ops button').click()}));
+const nav=$('#nav');TOPICS.forEach(x=>{if(x.u)nav.insertAdjacentHTML('beforeend',`<h3>${x.u}</h3>`);nav.insertAdjacentHTML('beforeend',`<button data-id="${x.id}" aria-pressed="false">${x.n}</button>`)});
+nav.onclick=e=>{const b=e.target.closest('button');if(b)load(b.dataset.id)};
+load('a1');
+</script>
+</body>
+</html>
